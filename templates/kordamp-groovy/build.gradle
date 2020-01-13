@@ -1,0 +1,132 @@
+plugins {
+    id 'org.kordamp.gradle.groovy-project'
+    id 'org.kordamp.gradle.bintray'
+    id 'org.kordamp.gradle.checkstyle'
+    id 'org.kordamp.gradle.codenarc'
+    id 'org.kordamp.gradle.coveralls'
+}
+
+if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = '**UNDEFINED**'
+if (!project.hasProperty('bintrayApiKey'))   ext.bintrayApiKey   = '**UNDEFINED**'
+
+config {
+    release = (rootProject.findProperty('release') ?: false).toBoolean()
+
+    info {
+        name        = '<%= name %>'
+        vendor      = '<%= vendor %>'
+        description = '<%= desc %>'
+
+        links {
+            website      = "https://github.com/" + slug
+            issueTracker = "https://github.com/" + slug + "/issues"
+            scm          = "https://github.com/" + slug + ".git"
+        }
+
+        people {
+            person {
+                id    = '<%= devId %>'
+                name  = '<%= devName %>'
+                roles = ['developer']
+            }
+        }
+
+        repositories {
+            repository {
+                name = 'localRelease'
+                url  = "" + project.rootProject.buildDir + "/repos/local/release"
+            }
+            repository {
+                name = 'localSnapshot'
+                url  = "" + project.rootProject.buildDir + "/repos/local/snapshot"
+            }
+        }
+    }
+
+    licensing {
+        licenses {
+            license {
+                id = 'Apache-2.0'
+            }
+        }
+    }
+
+    publishing {
+        signing             = false
+        releasesRepository  = 'localRelease'
+        snapshotsRepository = 'localSnapshot'
+    }
+
+    bintray {
+        credentials {
+            username = bintrayUsername
+            password = bintrayApiKey
+        }
+        // TODO: replace
+        userOrg    = '<%= bintrayOrg %>'
+        repo       = '<%= bintrayRepo %>'
+        name       = '<%= projectId %>'
+        publish    = true
+    }
+
+    quality {
+        checkstyle {
+            toolVersion = '8.27'
+        }
+
+        codenarc {
+            toolVersion = '1.5'
+        }
+    }
+
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url  "https://dl.bintray.com/agorapulse/libs" }
+        maven { url "https://repo.spring.io/release"  }
+    }
+
+    license {
+        exclude '**/*.json'
+        exclude '***.yml'
+    }
+}
+
+subprojects { Project subproject ->
+    if (subproject.name == 'guide') return
+
+    apply plugin: 'groovy'
+
+    dependencies {
+        // add your global dependencies
+    }
+
+    // useful for Micronaut
+    tasks.withType(GroovyCompile) {
+        groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+    }
+
+    // useful for Micronaut
+    tasks.withType(JavaCompile){
+        options.encoding = "UTF-8"
+        options.compilerArgs.add('-parameters')
+    }
+
+    // location independent tests (useful for stable CI builds)
+    tasks.withType(Test){
+        systemProperty 'user.timezone', 'UTC'
+        systemProperty 'user.language', 'en'
+    }
+
+    // useful for IntelliJ
+    task cleanOut(type: Delete) {
+        delete file('out')
+    }
+
+    clean.dependsOn cleanOut
+}
+
+check.dependsOn('aggregateCheckstyle', 'aggregateCodenarc', 'aggregateAllTestReports', 'coveralls')

@@ -1,0 +1,36 @@
+plugins {
+    id 'org.kordamp.gradle.guide'
+    id 'org.ajoberstar.git-publish'
+}
+
+config {
+    docs {
+        guide {
+            publish {
+                enabled = true
+            }
+        }
+    }
+}
+
+configurations {
+    asciidoctorExtensions
+}
+
+dependencies {
+    asciidoctorExtensions 'com.bmuschko:asciidoctorj-tabbed-code-extension:0.2'
+}
+
+asciidoctor {
+    configurations 'asciidoctorExtensions'
+
+    baseDirFollowsSourceDir()
+
+    attributes = [
+        'gradle-version': project.gradle.gradleVersion,
+        'source-highlighter': 'prettify',
+        'root-dir': rootDir,
+        'project-slug': slug
+    ]
+
+}
