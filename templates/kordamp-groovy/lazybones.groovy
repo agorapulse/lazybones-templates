@@ -66,8 +66,7 @@ File firstSubproject = new File(projectDir, "subprojects/$projectId")
 firstSubproject.mkdirs()
 
 File subprojectGradleFile = new File(firstSubproject, "${projectId}.gradle")
-subprojectGradleFile.createNewFile()
-subprojectGradleFile.text << """
+subprojectGradleFile.text = """
 // delete if this subproject should not be published to BinTray
 config {
     bintray {
@@ -86,25 +85,29 @@ new File(firstSubproject, "src/test/groovy/${pkg.replace('.', '/')}").mkdirs()
 new File(firstSubproject, "src/test/resources/").mkdirs()
 
 File gitignore = new File(projectDir, '.gitignore')
-gitignore.createNewFile()
-gitignore.text << [
-    "# Gradle",
-    "build/",
-    ".gradle/",
-    "# IDEs",
-    "*.c9",
-    "*.iml",
-    "*.ipr",
-    "*.iws",
-    "*.vscode",
-    ".idea/",
-    ".asscache",
-    "MANIFEST.MF",
-    "out",
-    "# PAW",
-    "*.paw",
-    "# Redis",
-    "*.rdb",
-].join('\n')
+gitignore.text = """
+# Gradle
+build/
+.gradle/
+
+# IDEs
+
+*.c9
+*.iml
+*.ipr
+*.iws
+*.vscode
+.idea/
+.asscache
+MANIFEST.MF
+out
+
+# PAW
+*.paw
+
+# Redis
+*.rdb
+
+"""
 
 
