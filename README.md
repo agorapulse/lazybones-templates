@@ -9,7 +9,13 @@ The generated project will contain
  
 ## Usage
 
-First you need to register add `agorapulse/lazybones-templates` into `~/.lazybones/config.groovy`
+If you don't have Lazybones installed yet, you can use SDKMAN:
+
+```
+sdk install lazybones
+```
+
+You need to add `agorapulse/lazybones-templates` into `~/.lazybones/config.groovy`
 
 ```
 bintrayRepositores = [
@@ -18,7 +24,7 @@ bintrayRepositores = [
 ]
 ```
 
-Then you can create new project using the avalable templates
+Then you can create new project using the available templates
 
 ```
 lazybones create kordamp-groovy kordamp-test
