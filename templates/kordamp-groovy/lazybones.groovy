@@ -43,7 +43,7 @@ String devId = ask("What is your preferred user id (nickname) [$devIdSuggestion]
 String bintrayOrg = ask("What is your BinTray organization or username [$githubOrg]:", githubOrg, "bintray.org")
 String bintrayRepo = ask("What is your BinTray repository name [maven]:", 'maven', "bintray.repo")
 
-def attrs = [
+Map attrs = [
     org: githubOrg,
     projectId: projectId,
     name: name,
@@ -65,7 +65,7 @@ processTemplates "README.md", attrs
 File firstSubproject = new File(projectDir, "subprojects/$projectId")
 firstSubproject.mkdirs()
 
-def subprojectGradleFile = new File(firstSubproject, "${projectId}.gradle")
+File subprojectGradleFile = new File(firstSubproject, "${projectId}.gradle")
 subprojectGradleFile.createNewFile()
 subprojectGradleFile.text << """
 // delete if this subproject should not be published to BinTray
@@ -84,5 +84,27 @@ new File(firstSubproject, "src/main/groovy/${pkg.replace('.', '/')}").mkdirs()
 new File(firstSubproject, "src/main/resources/").mkdirs()
 new File(firstSubproject, "src/test/groovy/${pkg.replace('.', '/')}").mkdirs()
 new File(firstSubproject, "src/test/resources/").mkdirs()
+
+File gitignore = new File(projectDir, '.gitignore')
+gitignore.createNewFile()
+gitignore.text << [
+    "# Gradle",
+    "build/",
+    ".gradle/",
+    "# IDEs",
+    "*.c9",
+    "*.iml",
+    "*.ipr",
+    "*.iws",
+    "*.vscode",
+    ".idea/",
+    ".asscache",
+    "MANIFEST.MF",
+    "out",
+    "# PAW",
+    "*.paw",
+    "# Redis",
+    "*.rdb",
+].join('\n')
 
 

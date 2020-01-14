@@ -95,7 +95,7 @@ allprojects {
     }
 }
 
-subprojects { Project subproject ->
+subprojects { subproject ->
     if (subproject.name == 'guide') return
 
     apply plugin: 'groovy'

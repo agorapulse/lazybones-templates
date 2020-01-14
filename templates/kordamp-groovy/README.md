@@ -6,7 +6,9 @@
 
 <%= desc %>
 
-See [Full Documentation][4]
+See [Full Documentation][DOCS]
+
+[DOCS]: https://<%= org %>.github.io/<%= projectId %>
 
 
 ## Next Steps (To Be Deleted)
@@ -27,24 +29,38 @@ This project uses GitHub Actions which to run check for every build and to publi
 
 `BINTRAY_KEY` - Access key with write priveledges to https://bintray.com/<%= bintrayOrg %>/<%= bintrayRepo %>/
 
-`COVERALLS_REPO_TOKEN` - Coveralls token which is available at https://coverals.io/github/<%= org %>/<%= projectId %>
+`COVERALLS_REPO_TOKEN` - Coveralls token which is available at https://coveralls.io/github/<%= org %>/<%= projectId %>
 
-`GITHUB_PERSONAL_TOKEN` - GitHub repository token with `repo` priviledges for https://bintray.com/<%= bintrayOrg %>/<%= bintrayRepo %>/
+`GITHUB_PERSONAL_TOKEN` - GitHub repository token with `repo` priviledges for https://github.com/<%= org %>/<%= projectId %>/
  
-3. Init Git repository in the root of this project, commit everything and push to GitHub:
-    ```
-    git init
-    git add -A
-    git commit -m "Initial commit"
-    git remote add origin git@github.com:<%= org %>/<%= projectId %>.git
-    git push -u origin master
-    ```
+### Initialize Guide and License Headers
+
+```
+./gradlew initGuide licenseFormat
+```
+ 
+### Init Git repository in the root of this project, commit everything and push to GitHub:
+  
+```
+git init
+git add -A
+git commit -m "Initial commit"
+git remote add origin git@github.com:<%= org %>/<%= projectId %>.git
+git push -u origin master
+```
 
 ### Cleanup
 
-Delete the setup section of the README file once it is no longer needed. Keep the links!
+Following steps will commit the cleaned up README file. You can copy them and keep in the clipboard. 
+Then paste the snippet into the terminal once the clean up is finished. 
+```
+git add README.md
+git commit -m "Cleaned up README.md"
+git push origin master
+```
+
+Delete the **Next Steps** section of this README file once it is no longer required and push again 
 
 [1]: https://github.com/new
 [2]: https://coveralls.io/repos/new
-[3]: https://github.com/agorapulse/<%= org %>/<%= projectId %>/settings/secrets
-[4]: https://<%= org %>.github.io/<%= projectId %>
+[3]: https://github.com/<%= org %>/<%= projectId %>/settings/secrets
