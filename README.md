@@ -24,6 +24,13 @@ bintrayRepositores = [
 ]
 ```
 
+or use the command :
+
+```
+lazybones config add bintrayRepositories agorapulse/lazybones-templates
+```
+
+
 Then you can create new project using the available templates
 
 ```
