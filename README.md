@@ -47,7 +47,7 @@ The generated project will contain
 Create new project using the available template
 
 ```
-lazybones create micronaut-function-groovy kordamp-test
+lazybones create micronaut-function-groovy micronaut-template-test
 ```
 
 [2]: http://micronaut.io
