@@ -34,7 +34,6 @@ out
 
 """
 
-
 String functionNameSuggestion = transformText(projectDir.name, from: NameType.HYPHENATED, to: NameType.CAMEL_CASE)
 String functionName = ask("What is the name of the function 'AccountStatistics' [$functionNameSuggestion]: ", functionNameSuggestion, "name")
 
@@ -43,6 +42,9 @@ String group = ask("What is the group (base package) of the new project [$groupS
 
 String pgkSuggestion = (group + '.' + transformText(functionName, from:  NameType.CAMEL_CASE, to: NameType.HYPHENATED)).replaceAll('[-_]', '.').toLowerCase()
 String pkg = ask("What is the base package of the new project [$pgkSuggestion]: ", pgkSuggestion, "pkg")
+
+String region = ask("In which region you want to create the function: [eu-west-1]", 'eu-west-1', "region")
+String profile = ask("Which AWS profile you want to use for deployment: [beta]", 'beta', "profile")
 
 String inputEventClass = readClass(loadAssist('input-events.yml'), 'input')
 String outputEventClass = readClass(loadAssist('output-events.yml'), 'output')
@@ -67,6 +69,8 @@ Map attrs = [
         outputEventClass: outputEventClass,
         outputEventClassSimple: outputEventClassSimple,
         selectedLibs: selectedLibs,
+        region: region,
+        profile: profile,
 
         // methods
         isNewEvent: this.&isNewEvent,
@@ -118,7 +122,6 @@ FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Response.groovy")
 // must be handled manaully because it's hard-excluded
 File gitignore = new File(projectDir, '.gitignore')
 gitignore.text = GIT_IGNORE_TEXT
-
 
 Map<String, String> loadAssist(String filename) {
     return yaml.load(new File(templateDir, ".lazybones/assist/$filename").newInputStream())

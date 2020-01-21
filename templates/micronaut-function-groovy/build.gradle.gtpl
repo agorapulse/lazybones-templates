@@ -90,6 +90,13 @@ jar {
     }
 }
 
+<% if (region || profile) { %>
+aws {
+    <% if (region) { %>region = '$region'<% } %>
+    <% if (profile) { %>profileName = '$profile'<% } %>
+}
+<% } %>
+
 task deploy(type: jp.classmethod.aws.gradle.lambda.AWSLambdaMigrateFunctionTask, dependsOn: shadowJar) {
     functionName = "$functionName"
     handler = "$pkg.${functionName}Handler::apply"
