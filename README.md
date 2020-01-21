@@ -4,17 +4,11 @@ If you don't have Lazybones installed yet, you can use SDKMAN:
 
 ```
 sdk install lazybones
+lazybones config add bintrayRepositories agorapulse/lazybones-templates
 ```
 
-You need to add `agorapulse/lazybones-templates` into `~/.lazybones/config.groovy`
 
-```
-bintrayRepositores = [
-    "pledbrook/lazybones-templates",
-    "agorapulse/lazybones-templates",
-]
-```
-
+Then you can create new project using the available templates
 ## Kordamp Groovy
 
 Simple templates which generate a Groovy multiproject using [Kordamp][1]
