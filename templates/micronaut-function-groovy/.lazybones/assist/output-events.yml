@@ -1,0 +1,6 @@
+string: java.lang.String
+map: java.util.Map
+ag: com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
+agv2: com.amazonaws.services.lambda.runtime.events.APIGatewayV2ProxyResponseEvent
+kinesis_analytics_output: com.amazonaws.services.lambda.runtime.events.KinesisAnalyticsOutputDeliveryResponse
+kinesis_analytics_firehose: com.amazonaws.services.lambda.runtime.events.KinesisAnalyticsInputPreprocessingResponse

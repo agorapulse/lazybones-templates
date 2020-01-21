@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-core:' + awsLambdaCoreVersion
     implementation 'com.amazonaws:aws-lambda-java-events:' + awsLambdaEventsVersion
     <% for (lib in selectedLibs) { %>
-    implementation "${lib.replace(micronautLibrariesVersion, '$micronautLibrariesVersion')}" <% } %>
+    implementation "$lib" <% } %>
 
     implementation "com.agorapulse:micronaut-log4aws:1.0.0"
 
