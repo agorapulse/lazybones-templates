@@ -169,11 +169,7 @@ import java.util.function.Function
 @InheritConstructors
 class ${functionName}Handler extends FunctionInitializer implements Function<$inputEventClassSimple, $outputEventClassSimple> {
 
-    private final ${functionName}Service ${functionNameProperty}Service
-
-    ${functionName}Handler(${functionName}Service ${functionNameProperty}Service) {
-        this.${functionNameProperty}Service = ${functionNameProperty}Service
-    }
+    @Inject ${functionName}Service ${functionNameProperty}Service
 
     @Override
     $outputEventClassSimple apply($inputEventClassSimple event) {
@@ -227,7 +223,11 @@ class ${functionName}HandlerSpec extends Specification {
 
     ${functionName}Service service = Mock(${functionName}Service)
 
-    @AutoCleanup ${functionName}Handler handler = new ${functionName}Handler(service)
+    @AutoCleanup ${functionName}Handler handler = new ${functionName}Handler()
+
+    void setup() {
+        handler.${functionNameProperty}Service = service
+    }
 
     void 'handle event'() {
         given:
