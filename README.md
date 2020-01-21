@@ -4,9 +4,13 @@ If you don't have Lazybones installed yet, you can use SDKMAN:
 
 ```
 sdk install lazybones
-lazybones config add bintrayRepositories agorapulse/lazybones-templates
 ```
 
+Then you need to add Agorapulse Lazybones repositories to the configuration:
+
+```
+lazybones config add bintrayRepositories agorapulse/lazybones-templates
+```
 
 Then you can create new project using the available templates
 ## Kordamp Groovy
