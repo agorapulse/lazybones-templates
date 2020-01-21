@@ -285,27 +285,6 @@ class ${functionName}ServiceSpec extends Specification {
 }
 """
 
-//processTemplates "README.md", attrs
-//
-//File firstSubproject = new File(projectDir, "subprojects/$projectId")
-//firstSubproject.mkdirs()
-//
-//File subprojectGradleFile = new File(firstSubproject, "${projectId}.gradle")
-//subprojectGradleFile.text = """
-//// delete if this subproject should not be published to BinTray
-//config {
-//    bintray {
-//        enabled = true
-//    }
-//}
-//
-//dependencies {
-//    // add project's dependencies
-//}
-//"""
-//
-
-
 File gitignore = new File(projectDir, '.gitignore')
 gitignore.text = GIT_IGNORE_TEXT
 
