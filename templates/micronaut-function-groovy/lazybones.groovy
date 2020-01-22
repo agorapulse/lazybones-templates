@@ -34,10 +34,24 @@ out
 
 """
 
+println()
+println('=' * 60)
+println('Micronaut Function Groovy Template by Agorapulse'.center(60))
+println('=' * 60)
+println()
+
 String functionNameSuggestion = transformText(projectDir.name, from: NameType.HYPHENATED, to: NameType.CAMEL_CASE)
 String functionName = ask("What is the name of the function 'AccountStatistics' [$functionNameSuggestion]: ", functionNameSuggestion, "name")
 
-String groupSuggestion = 'com.' + projectDir.parentFile.name.replaceAll('[-_]', '.').toLowerCase()
+String standaloneSuggestion = isProbablyStandalone(projectDir) ? 'yes' : 'no'
+boolean standalone = toBooleanAnswer(ask("Is this function standalone (not a subproject) [$standaloneSuggestion]: ", standaloneSuggestion, "standalone"))
+
+String orgSuggestion = projectDir.parentFile.name.toLowerCase()
+String slugSuggestion = "$orgSuggestion/$projectDir.name"
+
+String slug = standalone ? ask("Do you plan to share the project on GitHub? What will be the slug [$slugSuggestion]: ", slugSuggestion, "slug") : ''
+
+String groupSuggestion = 'com.' + orgSuggestion.replaceAll('[-_]', '.')
 String group = ask("What is the group (base package) of the new project [$groupSuggestion]: ", groupSuggestion, "group")
 
 String pgkSuggestion = (group + '.' + transformText(functionName, from:  NameType.CAMEL_CASE, to: NameType.HYPHENATED)).replaceAll('[-_]', '.').toLowerCase()
@@ -87,6 +101,8 @@ Map attrs = [
         group: group,
         pkg: pkg,
         port: port,
+        slug: slug,
+        standalone: standalone,
         inputEventClass: inputEventClass,
         inputEventClassSimple: inputEventClassSimple,
         outputEventClass: outputEventClass,
@@ -120,6 +136,8 @@ safeProcessTemplates "micronaut-cli.yml", attrs
 safeProcessTemplates "README.md", attrs
 safeProcessTemplates "request.http", attrs
 
+safeProcessTemplates ".github/workflows/*.yml", attrs
+
 safeProcessTemplates "src/main/resources/sentry.properties", attrs
 safeProcessTemplates "src/main/resources/application.yml", attrs
 safeProcessTemplates "src/main/resources/application-dev.yml", attrs
@@ -145,6 +163,17 @@ if (isNewEvent(outputEventClass)) {
 
 FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Request.groovy"))
 FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Response.groovy"))
+
+if (!slug) {
+    FileUtils.deleteDirectory(new File(templateDir, ".github"))
+}
+
+if (!standalone) {
+    FileUtils.deleteDirectory(new File(templateDir, "gradle"))
+    FileUtils.deleteQuietly(new File(templateDir, "gradlew"))
+    FileUtils.deleteQuietly(new File(templateDir, "gradlew.bat"))
+    FileUtils.deleteQuietly(new File(templateDir, "settings.gradle"))
+}
 
 
 // must be handled manaully because it's hard-excluded
@@ -270,4 +299,26 @@ static boolean requiresImport(String eventName) {
         return false
     }
     return true
+}
+
+static boolean isProbablyStandalone(File projectDir) {
+    File parent = projectDir.parentFile
+    for (int i = 0; i < 3; i++) {
+        if (new File(parent, 'build.gradle').exists() || new File(parent, 'settings.gradle').exists()) {
+            return false
+        }
+        try {
+            parent = parent.parentFile
+        } catch (Exception e) {
+            return true
+        }
+    }
+    return true
+}
+
+static boolean toBooleanAnswer(String answer) {
+    switch (answer.toLowerCase()) {
+        case ['y', 'yes', 't', 'true']: return true
+        default: return false
+    }
 }
