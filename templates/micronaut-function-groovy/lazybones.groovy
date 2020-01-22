@@ -59,7 +59,7 @@ String pkg = ask("What is the base package of the new project [$pgkSuggestion]: 
 
 String region = ask("In which region you want to create the function [eu-west-1]: ", 'eu-west-1', "region")
 String profile = ask("Which AWS profile you want to use for deployment [beta]: ", 'beta', "profile")
-String port = ask("Which port would yoo like to use for running the function locally [8080]: ", '8080', "port")
+String port = ask("Which port would you like to use for running the function locally [8080]: ", '8080', "port")
 
 String inputEventClass = readClass([req: "${functionName}Request"] + loadAssist('input-events.yml'), 'input')
 String outputEventClass = readClass([resp: "${functionName}Response"] + loadAssist('output-events.yml'), 'output')
@@ -127,6 +127,7 @@ Map attrs = [
         requiresImport: this.&requiresImport,
         newEventString: this.&newEventString,
         toYaml: this.&toYaml,
+        isSelected: this.&isSelected.rcurry(selectedLibs),
 ]
 
 safeProcessTemplates "settings.gradle", attrs
@@ -230,6 +231,10 @@ List<String> readLibs(Map<String,Object> libs) {
 
     List<Map.Entry<String, String>> libsList = libs.entrySet().toList()
 
+    libs.each { e ->
+        e.value.put('id', e.key)
+    }
+
     libsList.eachWithIndex{ e,  i ->
         println "${i.toString().padLeft(6)}: ${e.key.padRight(30)} - ${e.value.name} [${e.value.dependency*.coordinates.join(',')}]"
     }
@@ -321,4 +326,8 @@ static boolean toBooleanAnswer(String answer) {
         case ['y', 'yes', 't', 'true']: return true
         default: return false
     }
+}
+
+static boolean isSelected(String lib, List<Map> selectedLibs) {
+    return selectedLibs.any { it.id == lib }
 }

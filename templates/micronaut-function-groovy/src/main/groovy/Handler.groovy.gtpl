@@ -1,15 +1,20 @@
 package $pkg
 
-<% if (requiresImport(inputEventClass)) { %>import $inputEventClass<% } %>
-<% if (requiresImport(outputEventClass)) { %>import $outputEventClass<% } %>
-import groovy.transform.CompileStatic
-import groovy.transform.InheritConstructors
-import io.micronaut.function.executor.FunctionInitializer
-import io.micronaut.function.FunctionBean
-
-import javax.inject.Inject
-import java.util.function.Function
-
+<%
+    Set<String> imports = [
+        'groovy.transform.InheritConstructors',
+        'io.micronaut.function.executor.FunctionInitializer',
+        'io.micronaut.function.FunctionBean',
+        'groovy.transform.CompileStatic',
+        'javax.inject.Inject',
+        'java.util.function.Function',
+    ] as TreeSet
+    if (requiresImport(inputEventClass)) { imports << inputEventClass }
+    if (requiresImport(outputEventClass)) { imports << outputEventClass }
+    for (i in imports) {
+        out << 'import ' << i << '\n'
+    }
+%>
 @CompileStatic
 @FunctionBean(
         value = '$functionNameHyphens',

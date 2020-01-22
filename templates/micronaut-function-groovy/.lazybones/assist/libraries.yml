@@ -4,11 +4,17 @@ ag_ws:
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-ag-ws:$micronautLibrariesVersion
       scope: implementation
+  configuration:
+    aws:
+      websocket:
+        region: eu-west-1
+        connections:
+          url: https://abcefgh.execute-api.eu-west-1.amazonaws.com/test/@connections
 cw:
   name: Micronaut AWS SDK CloudWatch
   link: 'https://agorapulse.github.io/micronaut-libraries/#_aws_sdk_for_micronaut'
   dependency:
-    - coordinates: om.agorapulse:micronaut-aws-sdk-cloudwatch:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-cloudwatch:$micronautLibrariesVersion
       scope: implementation
 core:
   name: Micronaut AWS SDK Core
@@ -28,6 +34,11 @@ kinesis:
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-kinesis:$micronautLibrariesVersion
       scope: implementation
+  configuration:
+    aws:
+      kinesis:
+        region: eu-west-1
+        stream: MyStream
 kinesis_worker:
   name: Micronaut AWS SDK Kinesis Worker
   link: 'https://agorapulse.github.io/micronaut-libraries/#_listening_with_kinesislistener'
@@ -40,6 +51,11 @@ s3:
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-s3:$micronautLibrariesVersion
       scope: implementation
+  configuration:
+    aws:
+      s3:
+        region: eu-west-1
+        bucket: MyBucket
 ses:
   name: Micronaut AWS SDK SES
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_email_service_ses'
@@ -52,12 +68,36 @@ sns:
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-sns:$micronautLibrariesVersion
       scope: implementation
+  configuration:
+    aws:
+      sns:
+        region: eu-west-1
+        topic: MyTopic
+        ios:
+          arn: 'arn:aws:sns:eu-west-1:123456789:app/APNS/my-ios-app'
+        android:
+          arn: 'arn:aws:sns:eu-west-1:123456789:app/GCM/my-android-app'
+        amazon:
+          arn: 'arn:aws:sns:eu-west-1:123456789:app/ADM/my-amazon-app'
 sqs:
   name: Micronaut AWS SDK SQS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_queue_service_sqs'
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-sqs:$micronautLibrariesVersion
       scope: implementation
+  configuration:
+    aws:
+      sqs:
+        region: eu-west-1
+        queue: MyQueue
+        queueNamePrefix: 'vlad_'
+        autoCreateQueue: true
+        cache: false
+        fifo: true
+        delaySeconds: 0
+        messageRetentionPeriod: 345600
+        maximumMessageSize: 262144
+        visibilityTimeout: 30
 sts:
   name: Micronaut AWS SDK STS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_security_token_service_sts'
@@ -93,7 +133,7 @@ gorm_hibernate:
       scope: implementation
     - coordinates: com.h2database:h2
       scope: runtime
-    - coordinates: rg.apache.tomcat:tomcat-jdbc
+    - coordinates: org.apache.tomcat:tomcat-jdbc
       scope: runtime
   configuration:
     dataSource:
@@ -138,10 +178,10 @@ remember:
     - coordinates: com.agorapulse:remember:0.3
       scope: compileOnly
 snitch:
-  name: Micronatu Snitch
+  name: Micronaut Snitch
   link: 'https://github.com/agorapulse/micronaut-snitch#micronaut-snitch'
   dependency:
-    - coordinates: com.agorapulse:micronaut-snitch:0.1
+    - coordinates: com.agorapulse:micronaut-snitch:0.1.0
       scope: implementation
   configuration:
     snitches:

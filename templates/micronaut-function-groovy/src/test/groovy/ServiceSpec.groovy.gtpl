@@ -1,10 +1,17 @@
 package $pkg
 
-<% if (requiresImport(inputEventClass)) { %>import $inputEventClass<% } %>
-<% if (requiresImport(outputEventClass)) { %>import $outputEventClass<% } %>
-import io.micronaut.context.ApplicationContext
-import spock.lang.AutoCleanup
-import spock.lang.Specification
+<%
+    Set<String> imports = [
+        'spock.lang.AutoCleanup',
+        'spock.lang.Specification',
+        'io.micronaut.context.ApplicationContext',
+    ] as TreeSet
+    if (requiresImport(inputEventClass)) { imports << inputEventClass }
+    if (requiresImport(outputEventClass)) { imports << outputEventClass }
+    for (i in imports) {
+        out << 'import ' << i << '\n'
+    }
+%>
 
 class ${functionName}ServiceSpec extends Specification {
 
