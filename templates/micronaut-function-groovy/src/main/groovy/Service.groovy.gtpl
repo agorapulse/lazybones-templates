@@ -2,7 +2,6 @@ package $pkg
 
 <% if (requiresImport(inputEventClass)) { %>import $inputEventClass<% } %>
 <% if (requiresImport(outputEventClass)) { %>import $outputEventClass<% } %>
-
 import com.agorapulse.micronaut.log4aws.LogError
 
 import groovy.transform.CompileStatic

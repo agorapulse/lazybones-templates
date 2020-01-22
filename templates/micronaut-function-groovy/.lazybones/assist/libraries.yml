@@ -1,0 +1,207 @@
+ag_ws:
+  name: Micronaut AWS SDK API Gateway WebSockets
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_websockets_for_api_gateway'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-ag-ws:$micronautLibrariesVersion
+      scope: implementation
+cw:
+  name: Micronaut AWS SDK CloudWatch
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_aws_sdk_for_micronaut'
+  dependency:
+    - coordinates: om.agorapulse:micronaut-aws-sdk-cloudwatch:$micronautLibrariesVersion
+      scope: implementation
+core:
+  name: Micronaut AWS SDK Core
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_aws_sdk_for_micronaut'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-core:$micronautLibrariesVersion
+      scope: implementation
+dynamodb:
+  name: Micronaut AWS SDK DynamoDB
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_dynamodb'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-dynamodb:$micronautLibrariesVersion
+      scope: implementation
+kinesis:
+  name: Micronaut AWS SDK Kinesis
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_kinesis'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-kinesis:$micronautLibrariesVersion
+      scope: implementation
+kinesis_worker:
+  name: Micronaut AWS SDK Kinesis Worker
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_listening_with_kinesislistener'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-kinesis-worker:$micronautLibrariesVersion
+      scope: implementation
+s3:
+  name: Micronaut AWS SDK S3
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_storage_service_s3'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-s3:$micronautLibrariesVersion
+      scope: implementation
+ses:
+  name: Micronaut AWS SDK SES
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_email_service_ses'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-ses:$micronautLibrariesVersion
+      scope: implementation
+sns:
+  name: Micronaut AWS SDK SNS
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_notification_service_sns'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-sns:$micronautLibrariesVersion
+      scope: implementation
+sqs:
+  name: Micronaut AWS SDK SQS
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_queue_service_sqs'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-sqs:$micronautLibrariesVersion
+      scope: implementation
+sts:
+  name: Micronaut AWS SDK STS
+  link: 'https://agorapulse.github.io/micronaut-libraries/#_security_token_service_sts'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-aws-sdk-sts:$micronautLibrariesVersion
+      scope: implementation
+data_jdbc:
+  name: Micronaut Data JDBC
+  link: 'https://micronaut-projects.github.io/micronaut-data/latest/guide/#sql'
+  dependency:
+    - coordinates: io.micronaut.data:micronaut-data-jdbc:$micronautDataVersion
+      scope: implementation
+    - coordinates: com.h2database:h2
+      scope: runtime
+    - coordinates: io.micronaut.configuration:micronaut-jdbc-hikari
+      scope: runtime
+    - coordinates: jakarta.persistence:jakarta.persistence-api:2.2.2
+      scope: compileOnly
+  configuration:
+    datasources:
+      default:
+        url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+        driverClassName: org.h2.Driver
+        username: sa
+        password: ''
+        schema-generate: CREATE_DROP
+        dialect: H2
+gorm_hibernate:
+  name: GORM for Hibernate
+  link: 'https://micronaut-projects.github.io/micronaut-groovy/latest/guide/#gorm'
+  dependency:
+    - coordinates: io.micronaut.configuration:micronaut-hibernate-gorm
+      scope: implementation
+    - coordinates: com.h2database:h2
+      scope: runtime
+    - coordinates: rg.apache.tomcat:tomcat-jdbc
+      scope: runtime
+  configuration:
+    dataSource:
+      pooled: true
+      dbCreate: create-drop
+      url: jdbc:h2:mem:devDb
+      driverClassName: org.h2.Driver
+      username: sa
+      password:
+    hibernate:
+      cache:
+        queries: false
+        use_second_level_cache: true
+        use_query_cache: false
+        region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
+fb:
+  name: Facebook SDK for Micronaut
+  link: 'https://github.com/agorapulse/micronaut-facebook-sdk#micronaut-facebook-sdk'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-facebook-sdk:$micronautFacebookSdkVersion
+      scope: implementation
+    - coordinates: com.h2database:h2
+      scope: runtime
+    - coordinates: rg.apache.tomcat:tomcat-jdbc
+      scope: runtime
+  configuration:
+    faceboook:
+      sdk:
+        app:
+          # required
+          id: 1234567890
+          secret: t0ps€cr€tHaSh
+          # optional
+          permissions:
+            - email
+            - user_photos
+          version: v5.0
+remember:
+  name: Agorapulse Remember
+  link: 'https://github.com/agorapulse/remember#remember'
+  dependency:
+    - coordinates: com.agorapulse:remember:0.3
+      scope: compileOnly
+snitch:
+  name: Micronatu Snitch
+  link: 'https://github.com/agorapulse/micronaut-snitch#micronaut-snitch'
+  dependency:
+    - coordinates: com.agorapulse:micronaut-snitch:0.1
+      scope: implementation
+  configuration:
+    snitches:
+      id: mydmsid
+# testing
+fixt:
+  name: Fixt (Test Fixure Loading Helper)
+  link: 'https://agorapulse.github.io/testing-libraries/#_fixt'
+  dependency:
+    - coordinates: com.agorapulse.testing:fixt:0.1.3
+      scope: testImplementation
+gru_http:
+  name: Gru Tests for HTTP
+  link: 'https://agorapulse.github.io/gru/#_http'
+  dependency:
+    - coordinates: com.agorapulse:gru-http:$gruVersion
+      scope: testImplementation
+gru_ag:
+  name: Gru Tests for API Gateway
+  link: 'https://agorapulse.github.io/gru/#_aws_api_gateway'
+  dependency:
+    - coordinates: com.agorapulse:gru-api-gateway:$gruVersion
+      scope: testImplementation
+dru_dynamodb:
+  name: Dru Tests for DynamoDB
+  link: 'https://agorapulse.github.io/dru/#_dynamodb'
+  dependency:
+    - coordinates: com.agorapulse:dru-client-dynamodb:$druVersion
+      scope: testImplementation
+    - coordinates: com.agorapulse:dru-parser-json:$druVersion
+      scope: testImplementation
+dru_gorm:
+  name: Dru Tests for GORM
+  link: 'https://agorapulse.github.io/dru/#_gorm'
+  dependency:
+    - coordinates: com.agorapulse:dru-client-grom:$druVersion
+      scope: testImplementation
+    - coordinates: com.agorapulse:dru-parser-json:$druVersion
+      scope: testImplementation
+tc_localstack:
+  name: Testcontainers for Localstack (AWS)
+  link: 'https://medium.com/agorapulse-stories/how-to-unit-test-aws-services-with-localstack-and-testcontainers-1d39fe5dc6c2'
+  dependency:
+    - coordinates: org.testcontainers:spock:$testcontainersVersion
+      scope: testImplementation
+    - coordinates: org.testcontainers:localstack:$testcontainersVersion
+      scope: testImplementation
+tc_postgresql:
+  name: Testcontainers for PostgreSQL
+  link: 'https://www.testcontainers.org/modules/databases/postgres/'
+  dependency:
+    - coordinates: org.testcontainers:spock:$testcontainersVersion
+      scope: testImplementation
+    - coordinates: org.testcontainers:postgresql:$testcontainersVersion
+      scope: testImplementation
+tc_mysql:
+  name: Testcontainers for MySQL
+  link: 'https://www.testcontainers.org/modules/databases/mysql/'
+  dependency:
+    - coordinates: org.testcontainers:spock:$testcontainersVersion
+      scope: testImplementation
+    - coordinates: org.testcontainers:mysql:$testcontainersVersion
+      scope: testImplementation

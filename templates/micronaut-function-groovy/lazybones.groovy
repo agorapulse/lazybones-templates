@@ -43,51 +43,34 @@ String group = ask("What is the group (base package) of the new project [$groupS
 String pgkSuggestion = (group + '.' + transformText(functionName, from:  NameType.CAMEL_CASE, to: NameType.HYPHENATED)).replaceAll('[-_]', '.').toLowerCase()
 String pkg = ask("What is the base package of the new project [$pgkSuggestion]: ", pgkSuggestion, "pkg")
 
-String region = ask("In which region you want to create the function: [eu-west-1]", 'eu-west-1', "region")
-String profile = ask("Which AWS profile you want to use for deployment: [beta]", 'beta', "profile")
+String region = ask("In which region you want to create the function [eu-west-1]: ", 'eu-west-1', "region")
+String profile = ask("Which AWS profile you want to use for deployment [beta]: ", 'beta', "profile")
+String port = ask("Which port would yoo like to use for running the function locally [8080]: ", '8080', "port")
 
-String inputEventClass = readClass(loadAssist('input-events.yml'), 'input')
-String outputEventClass = readClass(loadAssist('output-events.yml'), 'output')
-List<String> selectedLibs = readLibs(loadAssist('implementation-libraries.yml'))
+String inputEventClass = readClass([req: "${functionName}Request"] + loadAssist('input-events.yml'), 'input')
+String outputEventClass = readClass([resp: "${functionName}Response"] + loadAssist('output-events.yml'), 'output')
+List<String> selectedLibs = readLibs(loadAssist('libraries.yml'))
 // clean up .lazybones directory
 FileUtils.deleteDirectory(new File(templateDir, ".lazybones/assist"))
 
 String functionNameHyphens = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.HYPHENATED)
 String functionNameProperty = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.PROPERTY)
+String functionNameNatural = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.NATURAL)
 String inputEventClassSimple = extractSimpleName(inputEventClass)
 String outputEventClassSimple = extractSimpleName(outputEventClass)
 
-Map attrs = [
-        // props
-        functionName: functionName,
-        functionNameHyphens: functionNameHyphens,
-        functionNameProperty: functionNameProperty,
-        group: group,
-        pkg: pkg,
-        inputEventClass: inputEventClass,
-        inputEventClassSimple: inputEventClassSimple,
-        outputEventClass: outputEventClass,
-        outputEventClassSimple: outputEventClassSimple,
-        selectedLibs: selectedLibs,
-        region: region,
-        profile: profile,
+String packageAsDir = pkg.replace('.', '/')
+String mainPackageRelativeDir = "src/main/groovy/$packageAsDir"
+String mainResourcesRelativeDir = "src/main/resources/"
+String testPackageRelativeDir = "src/test/groovy/$packageAsDir"
+String testResourcesRelativeDir = "src/test/resources/"
+String testPackageResourcesRelativeDir = "src/test/resources/$packageAsDir"
 
-        // methods
-        isNewEvent: this.&isNewEvent,
-        requiresImport: this.&requiresImport,
-        newEventString: this.&newEventString,
-]
-
-safeProcessTemplates "settings.gradle", attrs
-safeProcessTemplates "build.gradle", attrs
-safeProcessTemplates "gradle.properties", attrs
-safeProcessTemplates "micronaut-cli.yml", attrs
-
-File mainPackageDir = new File(projectDir, "src/main/groovy/${pkg.replace('.', '/')}")
-File mainResourcesDir = new File(projectDir, "src/main/resources/")
-File testPackageDir = new File(projectDir, "src/test/groovy/${pkg.replace('.', '/')}")
-File testResourcesDir = new File(projectDir, "src/test/resources/")
-File testPackageResourcesDir = new File(testResourcesDir, pkg.replace('.', '/'))
+File mainPackageDir = new File(projectDir, mainPackageRelativeDir)
+File mainResourcesDir = new File(projectDir, mainResourcesRelativeDir)
+File testPackageDir = new File(projectDir, testPackageRelativeDir)
+File testResourcesDir = new File(projectDir, testResourcesRelativeDir)
+File testPackageResourcesDir = new File(projectDir, testPackageResourcesRelativeDir)
 
 mainPackageDir.mkdirs()
 mainResourcesDir.mkdirs()
@@ -95,11 +78,56 @@ testPackageDir.mkdirs()
 testResourcesDir.mkdirs()
 testPackageResourcesDir.mkdirs()
 
+Map attrs = [
+        // props
+        functionName: functionName,
+        functionNameHyphens: functionNameHyphens,
+        functionNameProperty: functionNameProperty,
+        functionNameNatural: functionNameNatural,
+        group: group,
+        pkg: pkg,
+        port: port,
+        inputEventClass: inputEventClass,
+        inputEventClassSimple: inputEventClassSimple,
+        outputEventClass: outputEventClass,
+        outputEventClassSimple: outputEventClassSimple,
+        selectedLibs: selectedLibs,
+        region: region,
+        profile: profile,
+        packageAsDir: packageAsDir,
+        mainPackageRelativeDir: mainPackageRelativeDir,
+        mainResourcesRelativeDir: mainResourcesRelativeDir,
+        testPackageRelativeDir: testPackageRelativeDir,
+        testResourcesRelativeDir: testResourcesRelativeDir,
+        testPackageResourcesRelativeDir: testPackageResourcesRelativeDir,
+        mainPackageDir: mainPackageDir,
+        mainResourcesDir: mainResourcesDir,
+        testPackageDir: testPackageDir,
+        testResourcesDir: testResourcesDir,
+        testPackageResourcesDir: testPackageResourcesDir,
+
+        // methods
+        isNewEvent: this.&isNewEvent,
+        requiresImport: this.&requiresImport,
+        newEventString: this.&newEventString,
+        toYaml: this.&toYaml,
+]
+
+safeProcessTemplates "settings.gradle", attrs
+safeProcessTemplates "build.gradle", attrs
+safeProcessTemplates "gradle.properties", attrs
+safeProcessTemplates "micronaut-cli.yml", attrs
+safeProcessTemplates "README.md", attrs
+safeProcessTemplates "request.http", attrs
+
 safeProcessTemplates "src/main/resources/sentry.properties", attrs
 safeProcessTemplates "src/main/resources/application.yml", attrs
+safeProcessTemplates "src/main/resources/application-dev.yml", attrs
 safeProcessTemplates "src/main/groovy/*.java", attrs
 safeProcessTemplates "src/main/groovy/*.groovy", attrs
 safeProcessTemplates "src/test/groovy/*.groovy", attrs
+
+FileUtils.moveFile(new File(templateDir, "request.http"), new File(projectDir, "${functionNameHyphens}.http"))
 
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Application.java"), new File(mainPackageDir, 'Application.java'))
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Handler.groovy"), new File(mainPackageDir, "${functionName}Handler.groovy"))
@@ -123,11 +151,15 @@ FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Response.groovy")
 File gitignore = new File(projectDir, '.gitignore')
 gitignore.text = GIT_IGNORE_TEXT
 
-Map<String, String> loadAssist(String filename) {
+Map<String, Object> loadAssist(String filename) {
     return yaml.load(new File(templateDir, ".lazybones/assist/$filename").newInputStream())
 }
 
-String readClass(Map<String,String> inputEvents, String type) {
+String toYaml(Object o) {
+    return yaml.dumpAsMap(o)
+}
+
+String readClass(Map<String,Object> inputEvents, String type) {
     println "\nWhat is the $type event type (order number, shortcut, fully-qualified name or name of the new event):"
 
     List<Map.Entry<String, String>> eventsList = inputEvents.entrySet().toList()
@@ -164,13 +196,13 @@ String readClass(Map<String,String> inputEvents, String type) {
     return inputEventClass
 }
 
-List<String> readLibs(Map<String,String> libs) {
+List<String> readLibs(Map<String,Object> libs) {
     println "\nDo you need any additional libraries (comma-separated list of numbers or ids):"
 
     List<Map.Entry<String, String>> libsList = libs.entrySet().toList()
 
     libsList.eachWithIndex{ e,  i ->
-        println "${i.toString().padLeft(6)}: ${e.key.padRight(30)} - ${e.value}"
+        println "${i.toString().padLeft(6)}: ${e.key.padRight(30)} - ${e.value.name} [${e.value.dependency*.coordinates.join(',')}]"
     }
 
     String selected = ask(":", "", "libs")
@@ -180,7 +212,7 @@ List<String> readLibs(Map<String,String> libs) {
         return []
     }
 
-    List<String> selectedLibs = []
+    List<Map> selectedLibs = []
     for (String input in selected.split(/\s*,\s*/)) {
         switch (input) {
             case libs.keySet():
@@ -194,8 +226,8 @@ List<String> readLibs(Map<String,String> libs) {
         }
     }
 
-    for (String selectedLib in selectedLibs) {
-        println "Selected library $selectedLib"
+    for (Map selectedLib in selectedLibs) {
+        println "Selected library $selectedLib.name"
     }
 
     println()
