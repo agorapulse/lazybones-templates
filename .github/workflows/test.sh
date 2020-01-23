@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 curl -s "https://get.sdkman.io" | bash
+source "/home/runner/.sdkman/bin/sdkman-init.sh"
+
 sdk install lazybones
 
 ./gradlew installAllTemplates
