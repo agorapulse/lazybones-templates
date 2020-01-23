@@ -1,9 +1,13 @@
-name: Test
+name: Release
 
-on: [push]
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
-  build:
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
