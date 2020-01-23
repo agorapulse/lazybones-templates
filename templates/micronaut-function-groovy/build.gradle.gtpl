@@ -14,7 +14,8 @@ group "$group"
 repositories {
     mavenCentral()
     maven { url "https://jcenter.bintray.com" }
-    maven { url  "https://dl.bintray.com/agorapulse/libs" }
+    maven { url "https://dl.bintray.com/agorapulse/libs" }
+    maven { url "https://repo.grails.org/grails/core" }
 }
 
 configurations {
@@ -23,6 +24,11 @@ configurations {
 }
 
 dependencies {
+    // custom dependencies
+    <% for (dep in selectedLibs*.dependency.flatten().unique { it.coordinates } .sort { it.scope }) { %>
+    $dep.scope "$dep.coordinates" <% } %>
+
+    // default dependencies
     annotationProcessor platform("io.micronaut:micronaut-bom:" + micronautVersion)
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
@@ -42,8 +48,6 @@ dependencies {
 
     implementation 'com.amazonaws:aws-lambda-java-core:' + awsLambdaCoreVersion
     implementation 'com.amazonaws:aws-lambda-java-events:' + awsLambdaEventsVersion
-    <% for (lib in selectedLibs) { for (dep in lib.dependency) { %>
-    $dep.scope "$dep.coordinates" <% }} %>
 
     implementation "com.agorapulse:micronaut-log4aws:1.0.0"
 
