@@ -163,8 +163,8 @@ final List<String> availableRelativeDirs = [
 for (lib in selectedLibs) {
     File libTemplatesDir = new File(templateDir, ".lazybones/assist/templates/$lib.id")
     if (libTemplatesDir.exists()) {
+        safeProcessTemplates ".lazybones/assist/templates/$lib.id/**/*.*", attrs
         for (relativeDir in availableRelativeDirs) {
-            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.*", attrs
             File libraryRelativeDir = new File(templateDir, ".lazybones/assist/templates/$lib.id/$relativeDir")
             if (libraryRelativeDir.exists()) {
                 FileUtils.copyDirectory(libraryRelativeDir, new File(projectDir, attrs[relativeDir]))
@@ -324,7 +324,7 @@ private static String newEventString(String simpleClassName) {
         case Map.simpleName:
             return "[timestamp: ${System.currentTimeMillis()}]"
         case String.simpleName:
-            return "\"${UUID.randomUUID()}\""
+            return "'${UUID.randomUUID()}'"
         default:
             return "new $simpleClassName()"
     }
