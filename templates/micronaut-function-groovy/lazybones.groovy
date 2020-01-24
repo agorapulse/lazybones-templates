@@ -164,12 +164,11 @@ for (lib in selectedLibs) {
     File libTemplatesDir = new File(templateDir, ".lazybones/assist/templates/$lib.id")
     if (libTemplatesDir.exists()) {
         for (relativeDir in availableRelativeDirs) {
-            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.groovy", attrs
-            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.java", attrs
-            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.yml", attrs
+            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.*", attrs
             File libraryRelativeDir = new File(templateDir, ".lazybones/assist/templates/$lib.id/$relativeDir")
             if (libraryRelativeDir.exists()) {
                 FileUtils.copyDirectory(libraryRelativeDir, new File(projectDir, attrs[relativeDir]))
+                FileUtils.deleteDirectory(libraryRelativeDir)
             }
         }
     }
@@ -291,6 +290,12 @@ private List<String> readLibs(Map<String,Object> libs) {
         }
     }
 
+    while (selectedLibs*.requires.flatten().grep() && !selectedLibs*.requires.flatten().grep().every { it in selectedLibs*.id.flatten()}) {
+        for (req in (selectedLibs*.requires.flatten().grep() -  selectedLibs*.id.flatten())) {
+            selectedLibs << libs[req]
+        }
+    }
+
     for (Map selectedLib in selectedLibs) {
         println "Selected library $selectedLib.name"
     }
@@ -304,7 +309,9 @@ private void safeProcessTemplates(String pattern, Map attrs) {
     try {
         processTemplates(pattern, attrs)
     } catch (Exception e) {
-        System.err.println "Exception processing $pattern: $e"
+        System.err.println "Exception processing $pattern:"
+        e.printStackTrace()
+        throw e
     }
 }
 

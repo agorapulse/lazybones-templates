@@ -4,11 +4,8 @@ http_client:
   dependency:
     - coordinates: io.micronaut:micronaut-http-client
       scope: implementation
-    # TODO: keep it DRY
-    - coordinates: com.stehno.ersatz:ersatz:1.9.0
-      scope: testImplementation
-    - coordinates: io.undertow:undertow-core:2.0.13.Final
-      scope: testImplementation
+  requires:
+    - ersatz
   configuration:
     slack:
       url: https://hooks.slack.com/services

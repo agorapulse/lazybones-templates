@@ -18,6 +18,7 @@ function test_mfg() {
   ./gradlew check
 
   cd ..
+  rm -Rf mfg-test
 }
 
 set -e
@@ -49,6 +50,6 @@ cd kordamp-groovy-test
 ./gradlew test
 
 # test kordamp-groovy-test template
-test_mfg req, resp
-test_mfg map, string
-test_mfg ap, ap
+test_mfg req resp
+test_mfg map string
+test_mfg ap ap
