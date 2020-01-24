@@ -155,6 +155,7 @@ FileUtils.moveFile(new File(templateDir, "request.http"), new File(projectDir, "
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Application.java"), new File(mainPackageDir, 'Application.java'))
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Handler.groovy"), new File(mainPackageDir, "${functionName}Handler.groovy"))
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Service.groovy"), new File(mainPackageDir, "${functionName}Service.groovy"))
+FileUtils.moveFile(new File(templateDir, "src/main/groovy/Configuration.groovy"), new File(mainPackageDir, "${functionName}Configuration.groovy"))
 FileUtils.moveFile(new File(templateDir, "src/test/groovy/HandlerSpec.groovy"), new File(testPackageDir, "${functionName}HandlerSpec.groovy"))
 FileUtils.moveFile(new File(templateDir, "src/test/groovy/ServiceSpec.groovy"), new File(testPackageDir, "${functionName}ServiceSpec.groovy"))
 
