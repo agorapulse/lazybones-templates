@@ -1,3 +1,20 @@
+http_client:
+  name: Micronaut HTTP Client
+  link: 'https://docs.micronaut.io/latest/guide/httpClient.html'
+  dependency:
+    - coordinates: io.micronaut:micronaut-http-client
+      scope: implementation
+  requires:
+    - ersatz
+  configuration:
+    slack:
+      url: https://hooks.slack.com/services
+      app: someapp
+      key: somekey
+      secret: somesecret
+  documentation: >-
+    Example HTTP client [SlackClient]($mainPackageRelativeDir/SlackClient.java) and test [SlackClientSpec]($testPackageRelativeDir/SlackClientSpec.groovy) has been created for you.
+    The client is configured in [application.yml](src/main/resources/application.yml).
 ag_ws:
   name: Micronaut AWS SDK API Gateway WebSockets
   link: 'https://agorapulse.github.io/micronaut-libraries/#_websockets_for_api_gateway'
@@ -155,10 +172,6 @@ fb:
   dependency:
     - coordinates: com.agorapulse:micronaut-facebook-sdk:$micronautFacebookSdkVersion
       scope: implementation
-    - coordinates: com.h2database:h2
-      scope: runtime
-    - coordinates: rg.apache.tomcat:tomcat-jdbc
-      scope: runtime
   configuration:
     faceboook:
       sdk:
@@ -175,7 +188,7 @@ remember:
   name: Agorapulse Remember
   link: 'https://github.com/agorapulse/remember#remember'
   dependency:
-    - coordinates: com.agorapulse:remember:0.3
+    - coordinates: com.agorapulse:remember:0.4
       scope: compileOnly
 snitch:
   name: Micronaut Snitch
@@ -205,6 +218,14 @@ gru_ag:
   dependency:
     - coordinates: com.agorapulse:gru-api-gateway:$gruVersion
       scope: testImplementation
+ersatz:
+  name: Ersatz Mock Server
+  link: 'http://stehno.com/ersatz/guide/'
+  dependency:
+    - coordinates: com.stehno.ersatz:ersatz:1.9.0
+      scope: testImplementation
+    - coordinates: io.undertow:undertow-core:2.0.13.Final
+      scope: testImplementation
 dru_dynamodb:
   name: Dru Tests for DynamoDB
   link: 'https://agorapulse.github.io/dru/#_dynamodb'
@@ -217,7 +238,7 @@ dru_gorm:
   name: Dru Tests for GORM
   link: 'https://agorapulse.github.io/dru/#_gorm'
   dependency:
-    - coordinates: com.agorapulse:dru-client-grom:$druVersion
+    - coordinates: com.agorapulse:dru-client-gorm:$druVersion
       scope: testImplementation
     - coordinates: com.agorapulse:dru-parser-json:$druVersion
       scope: testImplementation

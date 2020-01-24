@@ -25,3 +25,9 @@ jobs:
     - uses: eskatos/gradle-command-action@v1
       with:
         arguments: check --stacktrace
+    - name: Show Reports
+      uses: actions/upload-artifact@v1
+      if: failure()
+      with:
+         name: reports
+         path: build/reports/

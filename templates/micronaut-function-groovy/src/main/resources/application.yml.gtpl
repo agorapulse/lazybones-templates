@@ -3,6 +3,6 @@ micronaut:
     name: $functionNameHyphens
 <% for (lib in selectedLibs) { if (lib.configuration) { %>
 ---
-# Required by $lib.name
+# Added by $lib.name
 ${toYaml(lib.configuration)}
 <% }} %>
