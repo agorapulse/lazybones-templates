@@ -4,14 +4,13 @@ import com.stehno.ersatz.ContentType
 import com.stehno.ersatz.ErsatzServer
 import groovy.json.JsonSlurper
 import io.micronaut.context.ApplicationContext
-import org.hamcrest.Matcher
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 class SlackClientSpec extends Specification {
 
     @AutoCleanup ErsatzServer server = new ErsatzServer({
-        decoder('application/json'){ content, context ->
+        decoder('application/json') { content, context ->
             new JsonSlurper().parse(content ?: '{}'.bytes)
         }
         reportToConsole()
@@ -28,7 +27,6 @@ class SlackClientSpec extends Specification {
             }
         }.start()
 
-
         context = ApplicationContext.build([
                 'slack.url': server.httpUrl,
                 'slack.app': 'slackapp',
@@ -42,7 +40,7 @@ class SlackClientSpec extends Specification {
 
     void 'handle event'() {
         when:
-            String response = client.postMessage("Hello")
+            String response = client.postMessage('Hello')
         then:
             response == 'ok'
 

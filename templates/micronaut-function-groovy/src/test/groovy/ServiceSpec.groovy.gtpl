@@ -12,7 +12,6 @@ package $pkg
         out << 'import ' << i << '\n'
     }
 %>
-
 class ${functionName}ServiceSpec extends Specification {
 
     @AutoCleanup ApplicationContext context
@@ -31,9 +30,9 @@ class ${functionName}ServiceSpec extends Specification {
     void 'handle event'() {
         given:
             $inputEventClassSimple event = ${newEventString(inputEventClassSimple)}
-            $outputEventClassSimple expectedOutput = ${newEventString(outputEventClassSimple)}
+            // $outputEventClassSimple expectedOutput = ${newEventString(outputEventClassSimple)}
         when:
-            $outputEventClassSimple output = service.handle(event)
+            /* $outputEventClassSimple output = */ service.handle(event)
         then:
             thrown UnsupportedOperationException
 

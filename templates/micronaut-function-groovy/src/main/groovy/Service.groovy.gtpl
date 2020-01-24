@@ -4,6 +4,8 @@ package $pkg
     Set<String> imports = [
         'com.agorapulse.micronaut.log4aws.LogError',
         'groovy.transform.CompileStatic',
+        'groovy.util.logging.Slf4j',
+        'javax.inject.Singleton',
         'javax.inject.Singleton',
     ] as TreeSet
     if (requiresImport(inputEventClass)) { imports << inputEventClass }
@@ -13,14 +15,15 @@ package $pkg
         out << 'import ' << i << '\n'
     }
 %>
+@Slf4j
 @Singleton
 @CompileStatic
 class ${functionName}Service {
 
-
     <% if (isSelected('snitch')) { %>@Snitch <% } %>@LogError
     $outputEventClassSimple handle($inputEventClassSimple event) {
         // TODO: implement
+        log.debug "got event: \$event"
         throw new UnsupportedOperationException('TODO: implement')
     }
 

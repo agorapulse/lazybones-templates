@@ -15,7 +15,7 @@ function test_mfg() {
       -Plibs=all
 
   cd mfg-test
-  ./gradlew test
+  ./gradlew check
 
   cd ..
 }

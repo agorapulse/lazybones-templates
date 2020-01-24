@@ -4,6 +4,8 @@ plugins {
     id "net.ltgt.apt-eclipse" version "0.21"
     id "groovy"
     id "application"
+    id "codenarc"
+    id "checkstyle"
 }
 
 
@@ -86,6 +88,13 @@ tasks.withType(Test){
     systemProperty 'user.language', 'en'
 }
 
+checkstyle {
+    toolVersion = '8.27'
+}
+
+codenarc {
+    toolVersion = '1.5'
+}
 
 shadowJar {
     mergeServiceFiles()

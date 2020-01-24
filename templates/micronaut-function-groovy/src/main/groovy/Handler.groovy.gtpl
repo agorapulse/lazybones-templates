@@ -23,6 +23,17 @@ package $pkg
 @InheritConstructors
 class ${functionName}Handler extends FunctionInitializer implements Function<$inputEventClassSimple, $outputEventClassSimple> {
 
+    /**
+     * This main method allows running the function as a CLI application using: echo '{}' | java -jar function.jar
+     * where the argument to echo is the JSON to be parsed.
+     */
+    static void main(String...args) throws IOException {
+        ${functionName}Handler function = new ${functionName}Handler()
+        function.run(args) { context ->
+            function.apply(context.get(${inputEventClassSimple}))
+        }
+    }
+
     @Inject ${functionName}Service ${functionNameProperty}Service
 
     @Override
@@ -30,12 +41,4 @@ class ${functionName}Handler extends FunctionInitializer implements Function<$in
          return ${functionNameProperty}Service.handle(event)
     }
 
-    /**
-     * This main method allows running the function as a CLI application using: echo '{}' | java -jar function.jar
-     * where the argument to echo is the JSON to be parsed.
-     */
-    static void main(String...args) throws IOException {
-        ${functionName}Handler function = new ${functionName}Handler()
-        function.run(args, { context -> function.apply(context.get(${inputEventClassSimple}.class)) })
-    }
 }
