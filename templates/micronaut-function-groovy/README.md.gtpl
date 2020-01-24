@@ -116,10 +116,24 @@ This function has enabled continuous integration and delivery using GitHub Actio
 <% if (selectedLibs) { %>
 ## Libraries
 
-You have selected the following libraries:
-<% for (lib in selectedLibs) { %>
- * [$lib.name][$lib.name]<% if (lib.configuration) { %> - [CONFIGURATION REQUIRED](src/main/resources/application.yml)!<% } %>
-<% } %>
+<%
+        for (lib in selectedLibs) {
+            out << '\n  * ' << lib.name
+
+            if (lib.link) {
+                out << " - [Documentation][$lib.name]"
+            }
+
+            if (lib.documentation) {
+                out << "\n    * $lib.documentation"
+            }
+
+            if (lib.configuration) {
+                out << "\n    * **CONFIGURATION REQUIRED:** - visit [application.yml](src/main/resources/application.yml) configuration file to correct the placeholder values!"
+            }
+
+        }
+%>
 
 Please, follow the links to read more about how to use the library in your project.
 

@@ -6,8 +6,10 @@ import uk.co.cacoethes.util.NameType
 import org.apache.commons.io.FileUtils
 import org.yaml.snakeyaml.Yaml
 import groovy.transform.Field
+import groovy.text.SimpleTemplateEngine
 
 @Field Yaml yaml = new Yaml()
+@Field SimpleTemplateEngine ste = new SimpleTemplateEngine()
 
 final String GIT_IGNORE_TEXT = """
 # Gradle
@@ -127,6 +129,10 @@ Map attrs = [
         toYaml: this.&toYaml,
         isSelected: this.&isSelected.rcurry(selectedLibs),
 ]
+
+selectedLibs.findAll { it.documentation }.each {
+    it.documentation = renderText(attrs, it.documentation)
+}
 
 safeProcessTemplates "settings.gradle", attrs
 safeProcessTemplates "build.gradle", attrs
@@ -313,6 +319,10 @@ private void safeProcessTemplates(String pattern, Map attrs) {
         e.printStackTrace()
         throw e
     }
+}
+
+private String renderText(Map<String, Object> attrs, String templateString) {
+    ste.createTemplate(templateString).make(attrs).toString().trim()
 }
 
 private static String extractSimpleName(String name) {

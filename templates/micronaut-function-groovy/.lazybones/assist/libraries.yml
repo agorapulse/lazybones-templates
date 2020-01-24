@@ -12,6 +12,9 @@ http_client:
       app: someapp
       key: somekey
       secret: somesecret
+  documentation: >-
+    Example HTTP client [SlackClient]($mainPackageRelativeDir/SlackClient.java) and test [SlackClientSpec]($testPackageRelativeDir/SlackClientSpec.groovy) has been created for you.
+    The client is configured in [application.yml](src/main/resources/application.yml).
 ag_ws:
   name: Micronaut AWS SDK API Gateway WebSockets
   link: 'https://agorapulse.github.io/micronaut-libraries/#_websockets_for_api_gateway'
