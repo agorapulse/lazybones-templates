@@ -10,13 +10,8 @@ http_client:
     - coordinates: io.undertow:undertow-core:2.0.13.Final
       scope: testImplementation
   configuration:
-    micronaut:
-      http:
-        services:
-          slack:
-            urls:
-              - https://hooks.slack.com/services
     slack:
+      url: https://hooks.slack.com/services
       app: someapp
       key: somekey
       secret: somesecret

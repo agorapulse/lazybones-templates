@@ -30,7 +30,7 @@ class SlackClientSpec extends Specification {
 
 
         context = ApplicationContext.build([
-                'micronaut.http.services.slack.urls': server.httpUrl,
+                'slack.url': server.httpUrl,
                 'slack.app': 'slackapp',
                 'slack.key': 'slackkey',
                 'slack.secret': 'slacksecret',

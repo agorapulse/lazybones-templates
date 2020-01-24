@@ -64,8 +64,6 @@ String port = ask("Which port would you like to use for running the function loc
 String inputEventClass = readClass([req: "${functionName}Request"] + loadAssist('input-events.yml'), 'input')
 String outputEventClass = readClass([resp: "${functionName}Response"] + loadAssist('output-events.yml'), 'output')
 List<String> selectedLibs = readLibs(loadAssist('libraries.yml'))
-// clean up .lazybones directory
-FileUtils.deleteDirectory(new File(templateDir, ".lazybones/assist"))
 
 String functionNameHyphens = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.HYPHENATED)
 String functionNameProperty = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.PROPERTY)
@@ -154,16 +152,43 @@ FileUtils.moveFile(new File(templateDir, "src/main/groovy/Service.groovy"), new 
 FileUtils.moveFile(new File(templateDir, "src/test/groovy/HandlerSpec.groovy"), new File(testPackageDir, "${functionName}HandlerSpec.groovy"))
 FileUtils.moveFile(new File(templateDir, "src/test/groovy/ServiceSpec.groovy"), new File(testPackageDir, "${functionName}ServiceSpec.groovy"))
 
+final List<String> availableRelativeDirs = [
+        'mainPackageRelativeDir',
+        'mainResourcesRelativeDir',
+        'testPackageRelativeDir',
+        'testResourcesRelativeDir',
+        'testPackageResourcesRelativeDir',
+]
+
+for (lib in selectedLibs) {
+    File libTemplatesDir = new File(templateDir, ".lazybones/assist/templates/$lib.id")
+    if (libTemplatesDir.exists()) {
+        for (relativeDir in availableRelativeDirs) {
+            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.groovy", attrs
+            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.java", attrs
+            safeProcessTemplates ".lazybones/assist/templates/$lib.id//**/*.yml", attrs
+            File libraryRelativeDir = new File(templateDir, ".lazybones/assist/templates/$lib.id/$relativeDir")
+            if (libraryRelativeDir.exists()) {
+                FileUtils.copyDirectory(libraryRelativeDir, new File(projectDir, attrs[relativeDir]))
+            }
+        }
+    }
+}
+
 if (isNewEvent(inputEventClass)) {
-    FileUtils.copyFile(new File(templateDir, "src/main/groovy/Request.groovy"), new File(mainPackageDir, "${inputEventClass}.groovy"))
+    FileUtils.moveFile(new File(templateDir, "src/main/groovy/Request.groovy"), new File(mainPackageDir, "${inputEventClass}.groovy"))
+} else {
+    FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Request.groovy"))
 }
 
 if (isNewEvent(outputEventClass)) {
-    FileUtils.copyFile(new File(templateDir, "src/main/groovy/Response.groovy"), new File(mainPackageDir, "${outputEventClass}.groovy"))
+    FileUtils.moveFile(new File(templateDir, "src/main/groovy/Response.groovy"), new File(mainPackageDir, "${outputEventClass}.groovy"))
+} else {
+    FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Response.groovy"))
 }
 
-FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Request.groovy"))
-FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Response.groovy"))
+// must be handled manaully because it's hard-excluded
+writeGitIgnoreFile(GIT_IGNORE_TEXT)
 
 if (!slug) {
     FileUtils.deleteDirectory(new File(templateDir, ".github"))
@@ -176,20 +201,23 @@ if (!standalone) {
     FileUtils.deleteQuietly(new File(templateDir, "settings.gradle"))
 }
 
+// clean up .lazybones directory
+FileUtils.deleteDirectory(new File(templateDir, ".lazybones/assist"))
 
-// must be handled manaully because it's hard-excluded
-File gitignore = new File(projectDir, '.gitignore')
-gitignore.text = GIT_IGNORE_TEXT
+private void writeGitIgnoreFile(String GIT_IGNORE_TEXT) {
+    File gitignore = new File(projectDir, '.gitignore')
+    gitignore.text = GIT_IGNORE_TEXT
+}
 
-Map<String, Object> loadAssist(String filename) {
+private Map<String, Object> loadAssist(String filename) {
     return yaml.load(new File(templateDir, ".lazybones/assist/$filename").newInputStream())
 }
 
-String toYaml(Object o) {
+private String toYaml(Object o) {
     return yaml.dumpAsMap(o)
 }
 
-String readClass(Map<String,Object> inputEvents, String type) {
+private String readClass(Map<String,Object> inputEvents, String type) {
     println "\nWhat is the $type event type (order number, shortcut, fully-qualified name or name of the new event):"
 
     List<Map.Entry<String, String>> eventsList = inputEvents.entrySet().toList()
@@ -226,7 +254,7 @@ String readClass(Map<String,Object> inputEvents, String type) {
     return inputEventClass
 }
 
-List<String> readLibs(Map<String,Object> libs) {
+private List<String> readLibs(Map<String,Object> libs) {
     println "\nDo you need any additional libraries (comma-separated list of numbers or ids):"
 
     List<Map.Entry<String, String>> libsList = libs.entrySet().toList()
@@ -249,6 +277,9 @@ List<String> readLibs(Map<String,Object> libs) {
     List<Map> selectedLibs = []
     for (String input in selected.split(/\s*,\s*/)) {
         switch (input) {
+            case 'all':
+                selectedLibs = libs.values().toList()
+                break
             case libs.keySet():
                 selectedLibs << libs[input]
                 break
@@ -269,7 +300,7 @@ List<String> readLibs(Map<String,Object> libs) {
     return selectedLibs
 }
 
-void safeProcessTemplates(String pattern, Map attrs) {
+private void safeProcessTemplates(String pattern, Map attrs) {
     try {
         processTemplates(pattern, attrs)
     } catch (Exception e) {
@@ -277,11 +308,11 @@ void safeProcessTemplates(String pattern, Map attrs) {
     }
 }
 
-static String extractSimpleName(String name) {
+private static String extractSimpleName(String name) {
     name.substring(name.lastIndexOf('.') + 1)
 }
 
-static String newEventString(String simpleClassName) {
+private static String newEventString(String simpleClassName) {
     switch(simpleClassName) {
         case Map.simpleName:
             return "[timestamp: ${System.currentTimeMillis()}]"
@@ -292,11 +323,11 @@ static String newEventString(String simpleClassName) {
     }
 }
 
-static boolean isNewEvent(String eventName) {
+private static boolean isNewEvent(String eventName) {
     return eventName ==~ /[A-Z]\w+/
 }
 
-static boolean requiresImport(String eventName) {
+private static boolean requiresImport(String eventName) {
     if (isNewEvent(eventName)) {
         return false
     }
@@ -306,7 +337,7 @@ static boolean requiresImport(String eventName) {
     return true
 }
 
-static boolean isProbablyStandalone(File projectDir) {
+private static boolean isProbablyStandalone(File projectDir) {
     File parent = projectDir.parentFile
     for (int i = 0; i < 3; i++) {
         if (new File(parent, 'build.gradle').exists() || new File(parent, 'settings.gradle').exists()) {
@@ -321,13 +352,13 @@ static boolean isProbablyStandalone(File projectDir) {
     return true
 }
 
-static boolean toBooleanAnswer(String answer) {
+private static boolean toBooleanAnswer(String answer) {
     switch (answer.toLowerCase()) {
         case ['y', 'yes', 't', 'true']: return true
         default: return false
     }
 }
 
-static boolean isSelected(String lib, List<Map> selectedLibs) {
+private static boolean isSelected(String lib, List<Map> selectedLibs) {
     return selectedLibs.any { it.id == lib }
 }
