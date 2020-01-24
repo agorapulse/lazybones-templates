@@ -13,6 +13,7 @@ This is a Micronaut AWS Lambda Function generated using [Micronaut Function Temp
 The following files are waiting for you implementation:
 
  * [${functionName}Service]($mainPackageRelativeDir/${functionName}Service.groovy) - The main service
+ * [${functionName}Configuration]($mainPackageRelativeDir/${functionName}Configuration.groovy) - The configuration object
  * [${functionName}ServiceSpec]($testPackageRelativeDir/${functionName}ServiceSpec.groovy) - The main service's test
 <% if (isNewEvent(inputEventClass)) { %> * [$inputEventClass]($mainPackageRelativeDir/${inputEventClass}.groovy) - Input event<% } %>
 <% if (isNewEvent(outputEventClass)) { %> * [$outputEventClass]($mainPackageRelativeDir/${outputEventClass}.groovy) - Output event<% } %>

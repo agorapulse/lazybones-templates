@@ -20,6 +20,12 @@ package $pkg
 @CompileStatic
 class ${functionName}Service {
 
+    private final ${functionName}Configuration configuration
+
+    ${functionName}Service(${functionName}Configuration configuration) {
+        this.configuration = configuration
+    }
+
     <% if (isSelected('snitch')) { %>@Snitch <% } %>@LogError
     $outputEventClassSimple handle($inputEventClassSimple event) {
         // TODO: implement
