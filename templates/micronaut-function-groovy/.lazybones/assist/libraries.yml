@@ -212,7 +212,7 @@ fixt:
       scope: testImplementation
   files:
   - name: FixtBasedSpec
-    path: testPackageRelativeDir/FixtBasedSpec
+    path: $testPackageRelativeDir/FixtBasedSpec.groovy
     description: Example test with fixtures
 gru_http:
   name: Gru Tests for HTTP
