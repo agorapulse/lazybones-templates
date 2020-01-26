@@ -65,7 +65,7 @@ String port = ask("Which port would you like to use for running the function loc
 
 String inputEventClass = readClass([req: "${functionName}Request"] + loadAssist('input-events.yml'), 'input')
 String outputEventClass = readClass([resp: "${functionName}Response"] + loadAssist('output-events.yml'), 'output')
-List<String> selectedLibs = readLibs(loadAssist('libraries.yml'))
+List<Map> selectedLibs = readLibs(loadAssist('libraries.yml'))
 
 String functionNameHyphens = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.HYPHENATED)
 String functionNameProperty = transformText(functionName, from: NameType.CAMEL_CASE, to: NameType.PROPERTY)
@@ -130,8 +130,16 @@ Map attrs = [
         isSelected: this.&isSelected.rcurry(selectedLibs),
 ]
 
-selectedLibs.findAll { it.documentation }.each {
-    it.documentation = renderText(attrs, it.documentation)
+selectedLibs.each {
+    if (it.documentation) {
+        it.documentation = renderText(attrs, it.documentation)
+    }
+    if (it.files) {
+        it.files.each {
+            it.path = renderText(attrs, it.path)
+            it.description = renderText(attrs, it.description)
+        }
+    }
 }
 
 safeProcessTemplates "settings.gradle", attrs
@@ -260,10 +268,10 @@ private String readClass(Map<String,Object> inputEvents, String type) {
     return inputEventClass
 }
 
-private List<String> readLibs(Map<String,Object> libs) {
+private List<Map> readLibs(Map<String,Object> libs) {
     println "\nDo you need any additional libraries (comma-separated list of numbers or ids):"
 
-    List<Map.Entry<String, String>> libsList = libs.entrySet().toList()
+    List<Map.Entry<String, Map>> libsList = libs.entrySet().toList()
 
     libs.each { e ->
         e.value.put('id', e.key)

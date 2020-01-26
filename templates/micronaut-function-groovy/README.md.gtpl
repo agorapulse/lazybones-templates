@@ -18,6 +18,13 @@ The following files are waiting for you implementation:
 <% if (isNewEvent(inputEventClass)) { %> * [$inputEventClass]($mainPackageRelativeDir/${inputEventClass}.groovy) - Input event<% } %>
 <% if (isNewEvent(outputEventClass)) { %> * [$outputEventClass]($mainPackageRelativeDir/${outputEventClass}.groovy) - Output event<% } %>
 
+<% if (selectedLibs.any { it.files}) {
+    out << "The following files were added as the examples by the libraries applied:"
+    for (file in selectedLibs*.files.flatten().grep().sort { it.name }) {
+        out << "\n * [$file.name]($file.path) - $file.description"
+    }
+} %>
+
 The following files are infrastructure ones and should not be changed:
  * [Application]($mainPackageRelativeDir/Application.java) - Local server launcher
  * [${functionName}Handler]($mainPackageRelativeDir/${functionName}Handler.groovy) - AWS Lambda handler
