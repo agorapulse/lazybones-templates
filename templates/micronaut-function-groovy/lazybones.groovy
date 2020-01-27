@@ -128,6 +128,7 @@ Map attrs = [
         newEventString: this.&newEventString,
         toYaml: this.&toYaml,
         isSelected: this.&isSelected.rcurry(selectedLibs),
+        extractSimpleName: this.&extractSimpleName,
 ]
 
 selectedLibs.each {

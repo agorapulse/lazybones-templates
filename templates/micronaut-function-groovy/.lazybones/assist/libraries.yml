@@ -12,6 +12,9 @@ http_client:
       app: someapp
       key: somekey
       secret: somesecret
+  provides:
+  - name: slackClient
+    type: SlackClient
   files:
   - name: SlackClient
     path: $mainPackageRelativeDir/SlackClient.java
@@ -37,6 +40,9 @@ cw:
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-cloudwatch:$micronautLibrariesVersion
       scope: implementation
+  provides:
+    - name: cloudwatch
+      type: com.amazonaws.services.cloudwatch.AmazonCloudWatch
 core:
   name: Micronaut AWS SDK Core
   link: 'https://agorapulse.github.io/micronaut-libraries/#_aws_sdk_for_micronaut'
@@ -49,6 +55,18 @@ dynamodb:
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-dynamodb:$micronautLibrariesVersion
       scope: implementation
+  provides:
+    - name: dynamoDBEntityService
+      type: DynamoDBEntityDBService
+  files:
+    - name: DynamoDBEntityDBService
+      path: $mainPackageRelativeDir/DynamoDBEntityDBService.groovy
+      description: Example declarative DynamoDB data service
+    - name: DynamoDBEntity
+      path: $mainPackageRelativeDir/DynamoDBEntity.groovy
+      description: Example DynamoDB entity
+  requires:
+    - dru_dynamodb
 kinesis:
   name: Micronaut AWS SDK Kinesis
   link: 'https://agorapulse.github.io/micronaut-libraries/#_kinesis'
@@ -60,6 +78,13 @@ kinesis:
       kinesis:
         region: eu-west-1
         stream: MyStream
+  provides:
+    - name: kinesisClient
+      type: SimpleKinesisClient
+  files:
+    - name: SimpleKinesisClient
+      path: $mainPackageRelativeDir/SimpleKinesisClient.java
+      description: Example declarative Kinesis client
 kinesis_worker:
   name: Micronaut AWS SDK Kinesis Worker
   link: 'https://agorapulse.github.io/micronaut-libraries/#_listening_with_kinesislistener'
@@ -77,12 +102,18 @@ s3:
       s3:
         region: eu-west-1
         bucket: MyBucket
+  provides:
+    - name: s3
+      type: com.agorapulse.micronaut.aws.s3.SimpleStorageService
 ses:
   name: Micronaut AWS SDK SES
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_email_service_ses'
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-ses:$micronautLibrariesVersion
       scope: implementation
+  provides:
+    - name: ses
+      type: com.agorapulse.micronaut.aws.ses.SimpleEmailService
 sns:
   name: Micronaut AWS SDK SNS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_notification_service_sns'
@@ -100,6 +131,13 @@ sns:
           arn: 'arn:aws:sns:eu-west-1:123456789:app/GCM/my-android-app'
         amazon:
           arn: 'arn:aws:sns:eu-west-1:123456789:app/ADM/my-amazon-app'
+  provides:
+    - name: notificationClient
+      type: SimpleNotificationClient
+  files:
+    - name: SimpleNotificationClient
+      path: $mainPackageRelativeDir/SimpleNotificationClient.java
+      description: Example declarative SNS client
 sqs:
   name: Micronaut AWS SDK SQS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_queue_service_sqs'
@@ -119,12 +157,22 @@ sqs:
         messageRetentionPeriod: 345600
         maximumMessageSize: 262144
         visibilityTimeout: 30
+  provides:
+    - name: queueClient
+      type: SimpleQueueClient
+  files:
+    - name: SimpleQueueClient
+      path: $mainPackageRelativeDir/SimpleQueueClient.java
+      description: Example declarative SQS client
 sts:
   name: Micronaut AWS SDK STS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_security_token_service_sts'
   dependency:
     - coordinates: com.agorapulse:micronaut-aws-sdk-sts:$micronautLibrariesVersion
       scope: implementation
+  provides:
+    - name: sts
+      type: com.agorapulse.micronaut.aws.sts.SecurityTokenService
 data_jdbc:
   name: Micronaut Data JDBC
   link: 'https://micronaut-projects.github.io/micronaut-data/latest/guide/#sql'
@@ -188,6 +236,9 @@ fb:
             - email
             - user_photos
           version: v5.0
+  provides:
+    - name: fb
+      type: com.agorapulse.micronaut.facebooksdk.FacebookApplication
 remember:
   name: Agorapulse Remember
   link: 'https://github.com/agorapulse/remember#remember'
@@ -214,6 +265,9 @@ fixt:
   - name: FixtBasedSpec
     path: $testPackageRelativeDir/FixtBasedSpec.groovy
     description: Example test with fixtures
+  - name: hello.txt
+    path: $testPackageResourcesRelativeDir/FixtBasedSpec/hello.txt
+    description: Example fixture file
 gru_http:
   name: Gru Tests for HTTP
   link: 'https://agorapulse.github.io/gru/#_http'
@@ -242,6 +296,13 @@ dru_dynamodb:
       scope: testImplementation
     - coordinates: com.agorapulse:dru-parser-json:$druVersion
       scope: testImplementation
+  files:
+    - name: DynamoDBEntitySpec
+      path: $testPackageRelativeDir/DynamoDBEntitySpec.groovy
+      description: Example test with Dru DynamoDB client
+    - name: enities.json
+      path: $testPackageResourcesRelativeDir/DynamoDBEntitySpec/entities.json
+      description: Example JSON entities fixture file
 dru_gorm:
   name: Dru Tests for GORM
   link: 'https://agorapulse.github.io/dru/#_gorm'
@@ -258,19 +319,35 @@ tc_localstack:
       scope: testImplementation
     - coordinates: org.testcontainers:localstack:$testcontainersVersion
       scope: testImplementation
+  files:
+    - name: AwsSpec
+      path: $testPackageRelativeDir/AwsSpec.groovy
+      description: Example mock AWS interactions test using Localstack
 tc_postgresql:
   name: Testcontainers for PostgreSQL
   link: 'https://www.testcontainers.org/modules/databases/postgres/'
   dependency:
+    - coordinates: org.postgresql:postgresql:42.2.9
+      scope: implementation
     - coordinates: org.testcontainers:spock:$testcontainersVersion
       scope: testImplementation
     - coordinates: org.testcontainers:postgresql:$testcontainersVersion
       scope: testImplementation
+  files:
+    - name: PostgreSQLSpec
+      path: $testPackageRelativeDir/PostgreSQLSpec.groovy
+      description: Example test using real PostgreSQL server running inside Docker
 tc_mysql:
   name: Testcontainers for MySQL
   link: 'https://www.testcontainers.org/modules/databases/mysql/'
   dependency:
+    - coordinates: mysql:mysql-connector-java:8.0.18
+      scope: implementation
     - coordinates: org.testcontainers:spock:$testcontainersVersion
       scope: testImplementation
     - coordinates: org.testcontainers:mysql:$testcontainersVersion
       scope: testImplementation
+  files:
+    - name: MySQLSpec
+      path: $testPackageRelativeDir/MySQLSpec.groovy
+      description: Example test using real MySQL server running inside Docker

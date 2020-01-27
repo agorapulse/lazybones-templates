@@ -1,16 +1,39 @@
 package $pkg
 
 <%
+    List<String> toBeInjected = []
+    List<String> toBeAssigned = []
+    List<String> toBeImported = []
+
+    for (service in ([[name: 'configuration', type: "${functionName}Configuration"]] + selectedLibs.findAll { it.provides } *.provides).flatten().grep()) {
+        toBeInjected << "${extractSimpleName(service.type)} $service.name"
+        toBeAssigned << service.name
+        if (service.type.contains('.')) {
+            toBeImported << service.type
+        }
+    }
+
     Set<String> imports = [
         'com.agorapulse.micronaut.log4aws.LogError',
         'groovy.transform.CompileStatic',
         'groovy.util.logging.Slf4j',
         'javax.inject.Singleton',
-        'javax.inject.Singleton',
     ] as TreeSet
-    if (requiresImport(inputEventClass)) { imports << inputEventClass }
-    if (requiresImport(outputEventClass)) { imports << outputEventClass }
-    if (isSelected('snitch')) { imports << 'com.agorapulse.micronaut.snitch.Snitch' }
+
+    imports.addAll toBeImported
+
+    if (requiresImport(inputEventClass)) {
+        imports << inputEventClass
+    }
+
+    if (requiresImport(outputEventClass)) {
+        imports << outputEventClass
+    }
+
+    if (isSelected('snitch')) {
+        imports << 'com.agorapulse.micronaut.snitch.Snitch'
+    }
+
     for (i in imports) {
         out << 'import ' << i << '\n'
     }
@@ -20,10 +43,17 @@ package $pkg
 @CompileStatic
 class ${functionName}Service {
 
-    private final ${functionName}Configuration configuration
-
-    ${functionName}Service(${functionName}Configuration configuration) {
-        this.configuration = configuration
+<%
+    for (service in toBeInjected) {
+        out << "    private final $service\n"
+    }
+%>
+    <% if (toBeInjected.size() > 5) { %>@SuppressWarnings('ParameterCount')\n    <% } %>${functionName}Service(
+        ${toBeInjected.join(',\n        ')}
+    ) {<%
+        for (field in toBeAssigned) {
+            out << '\n        ' << "this.$field = $field"
+        }%>
     }
 
     <% if (isSelected('snitch')) { %>@Snitch <% } %>@LogError

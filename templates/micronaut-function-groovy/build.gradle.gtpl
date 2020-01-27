@@ -84,6 +84,8 @@ tasks.withType(GroovyCompile) {
 
 tasks.withType(Test){
     environment 'TEST_RESOURCES_FOLDER', new File(project.projectDir, 'src/test/resources').canonicalPath
+    environment 'AWS_CBOR_DISABLE', 'true'
+
     systemProperty 'user.timezone', 'UTC'
     systemProperty 'user.language', 'en'
 }
