@@ -62,6 +62,8 @@ lazybones create kordamp-groovy kordamp-test
 Template which generate a Groovy [Micronaut][2] function. It allows you to select input and output event type
 and also to easily include some of the useful Micronaut AWS libraries.
 
+NOTE: This template is designed for event-based Micronaut functions. For [API Gateway Support](https://micronaut-projects.github.io/micronaut-aws/latest/guide/#apiProxy) with controllers use [Micronaut CLI](https://docs.micronaut.io/latest/guide/index.html#buildCLI)
+
 The generated project will contain
  * Micronaut Function
  * Tests
