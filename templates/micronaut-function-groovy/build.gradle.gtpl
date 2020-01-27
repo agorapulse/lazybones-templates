@@ -45,6 +45,7 @@ dependencies {
     developmentOnly platform("io.micronaut:micronaut-bom:" + micronautVersion)
     developmentOnly "io.micronaut:micronaut-http-server-netty"
     developmentOnly "io.micronaut:micronaut-function-web"
+    developmentOnly "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.5"
 
     compileOnly "io.micronaut:micronaut-inject-groovy"
 
