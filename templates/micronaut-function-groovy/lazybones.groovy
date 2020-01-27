@@ -121,6 +121,8 @@ Map attrs = [
         testPackageDir: testPackageDir,
         testResourcesDir: testResourcesDir,
         testPackageResourcesDir: testPackageResourcesDir,
+        templateDir: templateDir,
+        projectDir: projectDir,
 
         // methods
         isNewEvent: this.&isNewEvent,
