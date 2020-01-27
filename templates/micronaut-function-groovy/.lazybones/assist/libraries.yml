@@ -258,19 +258,35 @@ tc_localstack:
       scope: testImplementation
     - coordinates: org.testcontainers:localstack:$testcontainersVersion
       scope: testImplementation
+  files:
+    - name: AwsSpec
+      path: $testPackageRelativeDir/AwsSpec.groovy
+      description: Example mock AWS interactions test using Localstack
 tc_postgresql:
   name: Testcontainers for PostgreSQL
   link: 'https://www.testcontainers.org/modules/databases/postgres/'
   dependency:
+    - coordinates: org.postgresql:postgresql:42.2.9
+      scope: implementation
     - coordinates: org.testcontainers:spock:$testcontainersVersion
       scope: testImplementation
     - coordinates: org.testcontainers:postgresql:$testcontainersVersion
       scope: testImplementation
+  files:
+    - name: PostgreSQLSpec
+      path: $testPackageRelativeDir/PostgreSQLSpec.groovy
+      description: Example test using real PostgreSQL server running inside Docker
 tc_mysql:
   name: Testcontainers for MySQL
   link: 'https://www.testcontainers.org/modules/databases/mysql/'
   dependency:
+    - coordinates: mysql:mysql-connector-java:8.0.18
+      scope: implementation
     - coordinates: org.testcontainers:spock:$testcontainersVersion
       scope: testImplementation
     - coordinates: org.testcontainers:mysql:$testcontainersVersion
       scope: testImplementation
+  files:
+    - name: MySQLSpec
+      path: $testPackageRelativeDir/MySQLSpec.groovy
+      description: Example test using real MySQL server running inside Docker
