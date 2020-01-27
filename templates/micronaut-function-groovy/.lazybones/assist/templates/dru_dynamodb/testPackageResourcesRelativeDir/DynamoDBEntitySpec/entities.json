@@ -1,0 +1,12 @@
+{
+  "entities": [
+    {
+      "hashKey": "1",
+      "rangeKey": "1"
+    },
+    {
+      "hashKey": "1",
+      "rangeKey": "2"
+    }
+  ]
+}
