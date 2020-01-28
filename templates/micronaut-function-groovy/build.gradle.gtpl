@@ -1,17 +1,17 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
     id "jp.classmethod.aws.lambda" version "0.39"
-    id "net.ltgt.apt-eclipse" version "0.21"
     id "groovy"
+    <% if (standalone) { %>
     id "application"
     id "codenarc"
     id "checkstyle"
+    <% } %>
 }
-
-
-
-version "0.1"
-group "$group"
+<% if (standalone) { %>
+    version "0.1"
+    group "$group"
+<% } %>
 
 repositories {
     mavenCentral()
@@ -19,11 +19,12 @@ repositories {
     maven { url "https://dl.bintray.com/agorapulse/libs" }
     maven { url "https://repo.grails.org/grails/core" }
 }
-
+<% if (standalone) { %>
 configurations {
     // for dependencies that are needed for development only
     developmentOnly 
 }
+<% } %>
 
 dependencies {
     // custom dependencies
@@ -42,11 +43,12 @@ dependencies {
     implementation "io.micronaut:micronaut-function-aws"
     implementation "io.micronaut:micronaut-runtime-groovy"
 
+<% if (standalone) { %>
     developmentOnly platform("io.micronaut:micronaut-bom:" + micronautVersion)
     developmentOnly "io.micronaut:micronaut-http-server-netty"
     developmentOnly "io.micronaut:micronaut-function-web"
     developmentOnly "com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.5"
-
+<% } %>
     compileOnly "io.micronaut:micronaut-inject-groovy"
 
     implementation 'com.amazonaws:aws-lambda-java-core:' + awsLambdaCoreVersion
@@ -67,8 +69,9 @@ dependencies {
     testImplementation "io.micronaut.test:micronaut-test-spock"
     testImplementation "io.micronaut:micronaut-function-client"
 }
-
+<% if (standalone) { %>
 test.classpath += configurations.developmentOnly
+<% } %>
 
 shadowJar {
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer)
@@ -90,7 +93,7 @@ tasks.withType(Test){
     systemProperty 'user.timezone', 'UTC'
     systemProperty 'user.language', 'en'
 }
-
+<% if (standalone) { %>
 checkstyle {
     toolVersion = '8.27'
 }
@@ -98,11 +101,11 @@ checkstyle {
 codenarc {
     toolVersion = '1.5'
 }
-
+<% } %>
 shadowJar {
     mergeServiceFiles()
 }
-
+<% if (standalone) { %>
 run.classpath += configurations.developmentOnly
 run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote', '-Dmicronaut.environments=dev')
 mainClassName = "${pkg}.Application"
@@ -113,6 +116,7 @@ jar {
         attributes 'Main-Class': mainClassName
     }
 }
+<% } %>
 
 <% if (region || profile) { %>
 aws {
