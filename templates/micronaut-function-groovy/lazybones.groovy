@@ -103,6 +103,7 @@ Map attrs = [
         port: port,
         slug: slug,
         standalone: standalone,
+        oldGradle: isOldGradle(projectDir),
         inputEventClass: inputEventClass,
         inputEventClassSimple: inputEventClassSimple,
         outputEventClass: outputEventClass,
@@ -214,6 +215,7 @@ if (!slug) {
 if (!standalone) {
     FileUtils.deleteDirectory(new File(templateDir, "gradle"))
     FileUtils.deleteQuietly(new File(templateDir, "gradlew"))
+    FileUtils.deleteQuietly(new File(templateDir, "config"))
     FileUtils.deleteQuietly(new File(templateDir, "gradlew.bat"))
     FileUtils.deleteQuietly(new File(templateDir, "settings.gradle"))
 }
@@ -379,6 +381,23 @@ private static boolean isProbablyStandalone(File projectDir) {
         }
     }
     return true
+}
+
+private static boolean isOldGradle(File projectDir) {
+    File parent = projectDir.parentFile
+    for (int i = 0; i < 3; i++) {
+        File gradleWrapperProperties = new File(parent, 'gradle/wrapper/gradle-wrapper.properties')
+        if (gradleWrapperProperties.exists()) {
+            boolean old = gradleWrapperProperties.text =~ /gradle-[0-4]/
+            return old
+        }
+        try {
+            parent = parent.parentFile
+        } catch (Exception e) {
+            return false
+        }
+    }
+    return false
 }
 
 private static boolean toBooleanAnswer(String answer) {
