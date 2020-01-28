@@ -1,11 +1,14 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.0.0"
-    id "jp.classmethod.aws.lambda" version "0.39"
+    id "com.github.johnrengelman.shadow"<% if (standalone) { %> version "5.0.0" <% } %>
+    id "jp.classmethod.aws.lambda"<% if (standalone) { %> version "0.39" <% } %>
     id "groovy"
     <% if (standalone) { %>
     id "application"
     id "codenarc"
     id "checkstyle"
+    <% } else if (oldGradle) { %>
+    // the parent project is using old Gradle
+    id "io.spring.dependency-management"
     <% } %>
 }
 <% if (standalone) { %>
@@ -24,19 +27,24 @@ configurations {
     // for dependencies that are needed for development only
     developmentOnly 
 }
+<% } else if (oldGradle) { %>
+dependencyManagement {
+    imports {
+        mavenBom "io.micronaut:micronaut-bom:" + micronautVersion
+    }
+}
 <% } %>
-
 dependencies {
     // custom dependencies
     <% for (dep in selectedLibs*.dependency.flatten().unique { it.coordinates } .sort { it.scope }) { %>
     $dep.scope "$dep.coordinates" <% } %>
 
     // default dependencies
-    annotationProcessor platform("io.micronaut:micronaut-bom:" + micronautVersion)
+    <% if (!oldGradle) { %>annotationProcessor platform("io.micronaut:micronaut-bom:" + micronautVersion)<% } %>
     annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-validation"
 
-    implementation platform("io.micronaut:micronaut-bom:" + micronautVersion)
+    <% if (!oldGradle) { %>implementation platform("io.micronaut:micronaut-bom:" + micronautVersion)<% } %>
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-validation"
     implementation "io.micronaut:micronaut-runtime"
@@ -56,10 +64,10 @@ dependencies {
 
     implementation "com.agorapulse:micronaut-log4aws:1.0.0"
 
-    testAnnotationProcessor platform('io.micronaut:micronaut-bom:' + micronautVersion)
+    <% if (!oldGradle) { %>testAnnotationProcessor platform('io.micronaut:micronaut-bom:' + micronautVersion)<% } %>
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
 
-    testImplementation platform('io.micronaut:micronaut-bom:' + micronautVersion)
+    <% if (!oldGradle) { %>testImplementation platform('io.micronaut:micronaut-bom:' + micronautVersion)<% } %>
     testImplementation("org.spockframework:spock-core") {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
@@ -72,11 +80,11 @@ dependencies {
 <% if (standalone) { %>
 test.classpath += configurations.developmentOnly
 <% } %>
-
+<% if (!oldGradle) { %>
 shadowJar {
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer)
 }
-
+<% } %>
 tasks.withType(JavaCompile){
     options.encoding = "UTF-8"
     options.compilerArgs.add('-parameters')
