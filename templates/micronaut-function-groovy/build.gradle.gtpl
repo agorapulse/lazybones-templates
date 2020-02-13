@@ -1,6 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow"<% if (standalone) { %> version "5.0.0" <% } %>
-    id "jp.classmethod.aws.lambda"<% if (standalone) { %> version "0.39" <% } %>
+    id "jp.classmethod.aws.lambda"<% if (standalone) { %> version "0.41" <% } %>
     id "groovy"
     <% if (standalone) { %>
     id "application"
