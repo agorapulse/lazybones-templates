@@ -115,8 +115,11 @@ shadowJar {
     mergeServiceFiles()
 }
 <% if (standalone) { %>
-run.classpath += configurations.developmentOnly
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote', '-Dmicronaut.environments=dev')
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote', '-Dmicronaut.environments=dev')   
+}
+                    
 mainClassName = "${pkg}.Application"
 applicationDefaultJvmArgs = [""]
 
