@@ -111,6 +111,7 @@ codenarc {
 }
 <% } %>
 shadowJar {
+    mergeGroovyExtensionModules()
     mergeServiceFiles()
 }
 <% if (standalone) { %>
