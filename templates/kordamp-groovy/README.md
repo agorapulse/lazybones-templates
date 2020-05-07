@@ -31,7 +31,7 @@ This project uses GitHub Actions which to run check for every build and to publi
 
 `COVERALLS_REPO_TOKEN` - Coveralls token which is available at https://coveralls.io/github/<%= org %>/<%= projectId %>
 
-`GITHUB_PERSONAL_TOKEN` - GitHub repository token with `repo` priviledges for https://github.com/<%= org %>/<%= projectId %>/
+`PERSONAL_TOKEN` - GitHub repository token with `repo` priviledges for https://github.com/<%= org %>/<%= projectId %>/
  
 ### Initialize Guide and License Headers
 

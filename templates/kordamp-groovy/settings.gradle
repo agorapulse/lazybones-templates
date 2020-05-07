@@ -4,6 +4,7 @@ pluginManagement {
         gradlePluginPortal()
     }
     plugins {
+        id 'org.kordamp.gradle.settings'       version kordampPluginVersion
         id 'org.kordamp.gradle.groovy-project' version kordampPluginVersion
         id 'org.kordamp.gradle.bintray'        version kordampPluginVersion
         id 'org.kordamp.gradle.checkstyle'     version kordampPluginVersion
@@ -15,21 +16,9 @@ pluginManagement {
     }
 }
 
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath group: "org.kordamp.gradle", name: "settings-gradle-plugin", version: kordampPluginVersion
-        // forces the version suitable for all currently used plugins
-        classpath 'org.eclipse.jgit:org.eclipse.jgit:5.6.0.201912101111-r', {
-            force = true
-        }
-        classpath 'org.ajoberstar.grgit:grgit-core:4.0.1'
-    }
+plugins {
+    id 'org.kordamp.gradle.settings'
 }
-
-apply plugin: 'org.kordamp.gradle.settings'
 
 projects {
     directories = ['subprojects', 'docs']
