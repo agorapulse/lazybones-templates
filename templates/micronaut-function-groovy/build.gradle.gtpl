@@ -1,6 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow"<% if (standalone) { %> version "5.0.0" <% } %>
-    id "jp.classmethod.aws.lambda"<% if (standalone) { %> version "0.39" <% } %>
+    id "jp.classmethod.aws.lambda"<% if (standalone) { %> version "0.41" <% } %>
     id "groovy"
     <% if (standalone) { %>
     id "application"
@@ -111,11 +111,15 @@ codenarc {
 }
 <% } %>
 shadowJar {
+    mergeGroovyExtensionModules()
     mergeServiceFiles()
 }
 <% if (standalone) { %>
-run.classpath += configurations.developmentOnly
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote', '-Dmicronaut.environments=dev')
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-noverify', '-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote', '-Dmicronaut.environments=dev')   
+}
+                    
 mainClassName = "${pkg}.Application"
 applicationDefaultJvmArgs = [""]
 
