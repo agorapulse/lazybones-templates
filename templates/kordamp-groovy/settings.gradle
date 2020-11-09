@@ -20,7 +20,7 @@ plugins {
 }
 
 projects {
-    directories = ['subprojects', 'docs']
+    directories = ['libs', 'docs']
 }
 
 rootProject.name = '<%= projectId %>-root'

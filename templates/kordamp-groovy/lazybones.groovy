@@ -62,7 +62,7 @@ processTemplates "build.gradle", attrs
 processTemplates "gradle.properties", attrs
 processTemplates "README.md", attrs
 
-File firstSubproject = new File(projectDir, "subprojects/$projectId")
+File firstSubproject = new File(projectDir, "libs/$projectId")
 firstSubproject.mkdirs()
 
 File subprojectGradleFile = new File(firstSubproject, "${projectId}.gradle")
