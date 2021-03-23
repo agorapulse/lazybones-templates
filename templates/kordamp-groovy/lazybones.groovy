@@ -62,18 +62,11 @@ processTemplates "build.gradle", attrs
 processTemplates "gradle.properties", attrs
 processTemplates "README.md", attrs
 
-File firstSubproject = new File(projectDir, "subprojects/$projectId")
+File firstSubproject = new File(projectDir, "libs/$projectId")
 firstSubproject.mkdirs()
 
 File subprojectGradleFile = new File(firstSubproject, "${projectId}.gradle")
 subprojectGradleFile.text = """
-// delete if this subproject should not be published to BinTray
-config {
-    bintray {
-        enabled = true
-    }
-}
-
 dependencies {
     // add project's dependencies
 }
@@ -83,6 +76,26 @@ new File(firstSubproject, "src/main/groovy/${pkg.replace('.', '/')}").mkdirs()
 new File(firstSubproject, "src/main/resources/").mkdirs()
 new File(firstSubproject, "src/test/groovy/${pkg.replace('.', '/')}").mkdirs()
 new File(firstSubproject, "src/test/resources/").mkdirs()
+
+File firstExampleSubproject = new File(projectDir, "examples/$projectId-example")
+firstExampleSubproject.mkdirs()
+
+File exampleSubprojectGradleFile = new File(firstExampleSubproject, "${projectId}-example.gradle")
+exampleSubprojectGradleFile.text = """
+// delete if this subproject should not be published to BinTray
+
+dependencies {
+    implementation project(":$projectId")
+
+    // add example project's dependencies
+}
+"""
+
+new File(firstExampleSubproject, "src/main/groovy/${pkg.replace('.', '/')}/example").mkdirs()
+new File(firstExampleSubproject, "src/main/resources/").mkdirs()
+new File(firstExampleSubproject, "src/test/groovy/${pkg.replace('.', '/')}/example").mkdirs()
+new File(firstExampleSubproject, "src/test/resources/").mkdirs()
+
 
 File gitignore = new File(projectDir, '.gitignore')
 gitignore.text = """
