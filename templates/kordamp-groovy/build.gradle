@@ -161,7 +161,7 @@ projects {
             }
 
             dependencies {
-                testImplementation group: 'org.spockframework', name: 'spock-core', spockVersion
+                testImplementation group: 'org.spockframework', name: 'spock-core', version: spockVersion
             }
         }
     }
