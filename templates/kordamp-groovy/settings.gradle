@@ -20,7 +20,18 @@ plugins {
 }
 
 projects {
-    directories = ['subprojects', 'docs']
+    directories = ['libs', 'docs', 'examples']
+
+    plugins {
+        dir('docs') {
+            id 'org.kordamp.gradle.guide'
+            id 'org.ajoberstar.git-publish'
+        }
+        dirs(['libs', 'examples']) {
+            id 'java-library'
+            id 'groovy'
+        }
+    }
 }
 
 rootProject.name = '<%= projectId %>-root'

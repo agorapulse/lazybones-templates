@@ -95,38 +95,77 @@ allprojects {
     }
 }
 
-subprojects { subproject ->
-    if (subproject.name == 'guide') return
+projects {
+    subprojects {
+        dirs(['libs', 'examples']) { Project subproject ->
+            sourceCompatibility = 1.8
+            targetCompatibility = 1.8
 
-    apply plugin: 'groovy'
+            repositories {
+                mavenCentral()
+            }
 
-    dependencies {
-        // add your global dependencies
+            config {
+                bintray {
+                    name = subproject.name
+                }
+            }
+
+            // location independent tests (useful for stable CI builds)
+            tasks.withType(Test){
+                systemProperty 'user.timezone', 'UTC'
+                systemProperty 'user.language', 'en'
+            }
+
+            tasks.withType(JavaCompile) {
+                options.encoding = "UTF-8"
+                options.compilerArgs.add('-parameters')
+            }
+
+            tasks.withType(GroovyCompile) {
+                groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+            }
+
+            dependencies {
+                api platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+                compile platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+                implementation platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+                compileOnly platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+                testCompile platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+                testImplementation platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+            }
+
+            // useful for IntelliJ
+            task cleanOut(type: Delete) {
+                delete file('out')
+            }
+
+            clean.dependsOn cleanOut
+        }
+
+        dir('libs') {
+            processResources {
+                filesMatching('**/org.codehaus.groovy.runtime.ExtensionModule') {
+                    filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [VERSION: version])
+                }
+            }
+
+            jar {
+                manifest.attributes provider: 'gradle'
+            }
+
+            config {
+                bintray {
+                    enabled = true
+                }
+            }
+
+            dependencies {
+                testImplementation "org.spockframework:spock-core:$spockVersion"
+            }
+        }
     }
-
-    // useful for Micronaut
-    tasks.withType(GroovyCompile) {
-        groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
-    }
-
-    // useful for Micronaut
-    tasks.withType(JavaCompile){
-        options.encoding = "UTF-8"
-        options.compilerArgs.add('-parameters')
-    }
-
-    // location independent tests (useful for stable CI builds)
-    tasks.withType(Test){
-        systemProperty 'user.timezone', 'UTC'
-        systemProperty 'user.language', 'en'
-    }
-
-    // useful for IntelliJ
-    task cleanOut(type: Delete) {
-        delete file('out')
-    }
-
-    clean.dependsOn cleanOut
 }
+
 
 check.dependsOn('aggregateCheckstyle', 'aggregateCodenarc', 'aggregateAllTestReports', 'coveralls')
