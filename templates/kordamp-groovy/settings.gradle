@@ -1,26 +1,36 @@
-pluginManagement {
+buildscript {
     repositories {
         jcenter()
+        mavenCentral()
         gradlePluginPortal()
     }
-    plugins {
-        id 'org.kordamp.gradle.settings'       version kordampPluginVersion
-        id 'org.kordamp.gradle.groovy-project' version kordampPluginVersion
-        id 'org.kordamp.gradle.bintray'        version kordampPluginVersion
-        id 'org.kordamp.gradle.checkstyle'     version kordampPluginVersion
-        id 'org.kordamp.gradle.codenarc'       version kordampPluginVersion
-        id 'org.kordamp.gradle.guide'          version kordampPluginVersion
-        id 'org.kordamp.gradle.coveralls'      version kordampPluginVersion
-        id 'org.ajoberstar.git-publish'        version gitPublishPluginVersion
+    dependencies {
+        classpath group: 'org.kordamp.gradle',  name: 'settings-gradle-plugin',         version: kordampPluginVersion
+        classpath group: 'org.kordamp.gradle',  name: 'groovy-project-gradle-plugin',   version: kordampPluginVersion
+        classpath group: 'org.kordamp.gradle',  name: 'bintray-gradle-plugin',          version: kordampPluginVersion
+        classpath group: 'org.kordamp.gradle',  name: 'checkstyle-gradle-plugin',       version: kordampPluginVersion
+        classpath group: 'org.kordamp.gradle',  name: 'codenarc-gradle-plugin',         version: kordampPluginVersion
+        classpath group: 'org.kordamp.gradle',  name: 'guide-gradle-plugin',            version: kordampPluginVersion
+        classpath group: 'org.kordamp.gradle',  name: 'coveralls-gradle-plugin',        version: kordampPluginVersion
+        classpath group: 'org.ajoberstar',      name: 'gradle-git-publish',                    version: gitPublishPluginVersion
     }
 }
 
-plugins {
-    id 'org.kordamp.gradle.settings'
-}
-
-projects {
-    directories = ['subprojects', 'docs']
-}
+apply plugin:  'org.kordamp.gradle.settings'
 
 rootProject.name = '<%= projectId %>-root'
+
+projects {
+    directories = ['libs', 'docs', 'examples']
+
+    plugins {
+        dir('docs') {
+            id 'org.kordamp.gradle.guide'
+            id 'org.ajoberstar.git-publish'
+        }
+        dirs(['libs', 'examples']) {
+            id 'java-library'
+            id 'groovy'
+        }
+    }
+}
