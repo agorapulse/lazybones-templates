@@ -16,9 +16,9 @@ buildscript {
     }
 }
 
-plugins {
-    id 'org.kordamp.gradle.settings'
-}
+apply plugin:  'org.kordamp.gradle.settings'
+
+rootProject.name = '<%= projectId %>-root'
 
 projects {
     directories = ['libs', 'docs', 'examples']
@@ -34,5 +34,3 @@ projects {
         }
     }
 }
-
-rootProject.name = '<%= projectId %>-root'
