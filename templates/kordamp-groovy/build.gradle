@@ -127,12 +127,12 @@ projects {
             }
 
             dependencies {
-                api platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
-                compile platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
-                implementation platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
-                compileOnly platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
-                testCompile platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
-                testImplementation platform("org.codehaus.groovy:groovy-bom:$groovyVersion")
+                api platform("org.codehaus.groovy:groovy-bom:\$groovyVersion")
+                compile platform("org.codehaus.groovy:groovy-bom:\$groovyVersion")
+                implementation platform("org.codehaus.groovy:groovy-bom:\$groovyVersion")
+                compileOnly platform("org.codehaus.groovy:groovy-bom:\$groovyVersion")
+                testCompile platform("org.codehaus.groovy:groovy-bom:\$groovyVersion")
+                testImplementation platform("org.codehaus.groovy:groovy-bom:\$groovyVersion")
             }
 
             // useful for IntelliJ
@@ -161,7 +161,7 @@ projects {
             }
 
             dependencies {
-                testImplementation "org.spockframework:spock-core:$spockVersion"
+                testImplementation group: 'org.spockframework', name: 'spock-core', spockVersion
             }
         }
     }
