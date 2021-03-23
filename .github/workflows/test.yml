@@ -11,15 +11,9 @@ jobs:
       - uses: actions/checkout@v1
       - name: Run Script
         run: .github/workflows/test.sh
-      - name: Show Micronaut Function Groovy Test Project
-        uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: micronaut-function-groovy
-          path: mfg-test
       - name: Show Kordamp Groovy Test Project
         uses: actions/upload-artifact@v1
         if: failure()
         with:
           name: kordamp-groovy
-          path: kordamp-groovy-test
+          path: /tmp/kordamp-groovy-test
