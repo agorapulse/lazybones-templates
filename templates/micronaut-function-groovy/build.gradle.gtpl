@@ -18,8 +18,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url "https://jcenter.bintray.com" }
-    maven { url "https://dl.bintray.com/agorapulse/libs" }
     maven { url "https://repo.grails.org/grails/core" }
 }
 <% if (standalone) { %>
