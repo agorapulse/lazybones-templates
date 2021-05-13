@@ -341,7 +341,7 @@ tc_mysql:
   name: Testcontainers for MySQL
   link: 'https://www.testcontainers.org/modules/databases/mysql/'
   dependency:
-    - coordinates: mysql:mysql-connector-java:8.0.18
+    - coordinates: mysql:mysql-connector-java:8.0.25
       scope: implementation
     - coordinates: org.testcontainers:spock:$testcontainersVersion
       scope: testImplementation

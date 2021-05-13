@@ -23,10 +23,12 @@ function test_mfg() {
 
 set -e
 
-curl -s "https://get.sdkman.io" | bash
-source "/home/runner/.sdkman/bin/sdkman-init.sh"
+export LAZYBONES_REPO_DIR=/tmp/lazybones
+git clone https://github.com/agorapulse/lazybones "$LAZYBONES_REPO_DIR"
 
-sdk install lazybones
+$LAZYBONES_REPO_DIR/gradlew -p "$LAZYBONES_REPO_DIR" install installDist -x test -x integTest
+
+export PATH="$PATH:$LAZYBONES_REPO_DIR/lazybones-app/build/install/lazybones/bin"
 
 ./gradlew installAllTemplates
 

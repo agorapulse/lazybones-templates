@@ -22,7 +22,7 @@ class MySQLSpec extends Specification {
 
     void setup() {
         ApplicationContext context = ApplicationContext.build(
-                'datasources.default.url': mySQLContainer.jdbcUrl,
+                'datasources.default.url': mySQLContainer.jdbcUrl + '?useSSL=false',
                 'datasources.default.username': 'foo',
                 'datasources.default.password': 'secret',
                 'datasources.default.driverClassName': 'com.mysql.jdbc.Driver',

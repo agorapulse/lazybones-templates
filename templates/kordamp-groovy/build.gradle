@@ -1,13 +1,16 @@
 plugins {
     id 'org.kordamp.gradle.groovy-project'
-    id 'org.kordamp.gradle.bintray'
     id 'org.kordamp.gradle.checkstyle'
     id 'org.kordamp.gradle.codenarc'
     id 'org.kordamp.gradle.coveralls'
+    id 'io.github.gradle-nexus.publish-plugin'
 }
 
-if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = '**UNDEFINED**'
-if (!project.hasProperty('bintrayApiKey'))   ext.bintrayApiKey   = '**UNDEFINED**'
+if (!project.hasProperty('ossrhUsername'))      ext.ossrhUsername       = System.getenv('SONATYPE_USERNAME') ?: '**UNDEFINED**'
+if (!project.hasProperty('ossrhPassword'))      ext.ossrhPassword       = System.getenv('SONATYPE_PASSWORD') ?: '**UNDEFINED**'
+if (!project.hasProperty('signingKeyId'))       ext.signingKeyId        = System.getenv('SIGNING_KEY_ID') ?: '**UNDEFINED**'
+if (!project.hasProperty('signingPassword'))    ext.signingPassword     = System.getenv('SIGNING_PASSWORD') ?: '**UNDEFINED**'
+if (!project.hasProperty('signingSecretKey'))   ext.signingSecretKey    = System.getenv('SIGNING_SECRET_KEY_PATH') ? rootProject.file(System.getenv('SIGNING_SECRET_KEY_PATH')).text : '**UNDEFINED**'
 
 config {
     release = (rootProject.findProperty('release') ?: false).toBoolean()
@@ -18,9 +21,9 @@ config {
         description = '<%= desc %>'
 
         links {
-            website      = "https://github.com/" + slug
-            issueTracker = "https://github.com/" + slug + "/issues"
-            scm          = "https://github.com/" + slug + ".git"
+            website      = 'https://github.com/' + slug
+            issueTracker = 'https://github.com/' + slug + '/issues'
+            scm          = 'https://github.com/' + slug + '.git'
         }
 
         people {
@@ -34,11 +37,11 @@ config {
         repositories {
             repository {
                 name = 'localRelease'
-                url  = "" + project.rootProject.buildDir + "/repos/local/release"
+                url  = '' + project.rootProject.buildDir + '/repos/local/release'
             }
             repository {
                 name = 'localSnapshot'
-                url  = "" + project.rootProject.buildDir + "/repos/local/snapshot"
+                url  = '' + project.rootProject.buildDir + '/repos/local/snapshot'
             }
         }
     }
@@ -52,21 +55,15 @@ config {
     }
 
     publishing {
-        signing             = false
+        signing {
+            enabled =  true
+            keyId = signingKeyId
+            secretKey = signingSecretKey
+            password = signingPassword
+        }
+
         releasesRepository  = 'localRelease'
         snapshotsRepository = 'localSnapshot'
-    }
-
-    bintray {
-        credentials {
-            username = bintrayUsername
-            password = bintrayApiKey
-        }
-        // TODO: replace
-        userOrg    = '<%= bintrayOrg %>'
-        repo       = '<%= bintrayRepo %>'
-        name       = '<%= projectId %>'
-        publish    = true
     }
 
     quality {
@@ -81,11 +78,18 @@ config {
 
 }
 
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = ossrhUsername
+            password = ossrhPassword
+        }
+    }
+}
+
 allprojects {
     repositories {
-        jcenter()
         mavenCentral()
-        maven { url  "https://dl.bintray.com/agorapulse/libs" }
         maven { url "https://repo.spring.io/release"  }
     }
 
@@ -103,12 +107,6 @@ projects {
 
             repositories {
                 mavenCentral()
-            }
-
-            config {
-                bintray {
-                    name = subproject.name
-                }
             }
 
             // location independent tests (useful for stable CI builds)
@@ -143,6 +141,14 @@ projects {
             clean.dependsOn cleanOut
         }
 
+        dir('examples') {
+            config {
+                publishing {
+                    enabled = false
+                }
+            }
+        }
+
         dir('libs') {
             processResources {
                 filesMatching('**/org.codehaus.groovy.runtime.ExtensionModule') {
@@ -152,12 +158,6 @@ projects {
 
             jar {
                 manifest.attributes provider: 'gradle'
-            }
-
-            config {
-                bintray {
-                    enabled = true
-                }
             }
 
             dependencies {

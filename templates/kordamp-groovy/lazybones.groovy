@@ -37,12 +37,8 @@ while (!devName) {
     devName = ask("Who are you?", '', "dev.name")
 }
 
-String devIdSuggestion = System.getenv('BINTRAY_USER') ?: System.getenv('LOGNAME') ?:  System.getenv('USER')
+String devIdSuggestion = System.getenv('LOGNAME') ?:  System.getenv('USER')
 String devId = ask("What is your preferred user id (nickname) [$devIdSuggestion]:", devIdSuggestion, "dev.id")
-
-String bintrayOrg = ask("What is your BinTray organization or username [$githubOrg]:", githubOrg, "bintray.org")
-String bintrayRepo = ask("What is your BinTray repository name [maven]:", 'maven', "bintray.repo")
-
 Map attrs = [
     org: githubOrg,
     projectId: projectId,
@@ -51,8 +47,6 @@ Map attrs = [
     desc: description,
     devId: devId,
     devName: devName,
-    bintrayOrg: bintrayOrg,
-    bintrayRepo: bintrayRepo,
     slug: slug,
     group: group
 ]
@@ -82,8 +76,6 @@ firstExampleSubproject.mkdirs()
 
 File exampleSubprojectGradleFile = new File(firstExampleSubproject, "${projectId}-example.gradle")
 exampleSubprojectGradleFile.text = """
-// delete if this subproject should not be published to BinTray
-
 dependencies {
     implementation project(":$projectId")
 
