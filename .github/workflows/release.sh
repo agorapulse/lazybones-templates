@@ -4,12 +4,10 @@ function uploadFile() {
     echo "label: $1"
     echo "file: $2"
     curl \
-    --data-urlencode "name=$(basename $2)" \
-    --data-urlencode "label=$1" \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Content-Type: $(file -b --mime-type $2)" \
     --data-binary @$2 \
-    "$UPLOAD_URL"
+    "$UPLOAD_URL?name=$(basename $2)&label=$1"
 }
 
 set -e
@@ -29,5 +27,5 @@ export PATH="$PATH:$LAZYBONES_REPO_DIR/lazybones-app/build/install/lazybones/bin
 
 ./gradlew packageAllTemplates
 
-uploadFile "Kordamp Groovy Template" "build/packages/kordamp-groovy-template-$RELEASE_VERSION.zip"
-uploadFile "Micronaut Function Groovy Template" "build/packages/micronaut-function-groovy-template-$RELEASE_VERSION.zip"
+uploadFile "Kordamp+Groovy+Template" "build/packages/kordamp-groovy-template-$RELEASE_VERSION.zip"
+uploadFile "Micronaut+Function+Groovy+Template" "build/packages/micronaut-function-groovy-template-$RELEASE_VERSION.zip"
