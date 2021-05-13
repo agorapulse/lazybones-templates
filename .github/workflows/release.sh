@@ -4,8 +4,8 @@ function uploadFile() {
     echo "label: $1"
     echo "file: $2"
     curl \
-    --data-urlencode "name=$(basename $2)"
-    --data-urlencode "label=1"
+    --data-urlencode "name=$(basename $2)" \
+    --data-urlencode "label=1" \
     -H "Authorization: token $GITHUB_TOKEN" \
     -H "Content-Type: $(file -b --mime-type $2)" \
     --data-binary @$2 \
