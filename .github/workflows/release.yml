@@ -1,15 +1,16 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - '*'
+  release:
+    types:
+      - published
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
     steps:
+      - uses: hmarr/debug-action@v2
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v2
         with:
@@ -20,7 +21,7 @@ jobs:
         uses: ncipollo/semantic-version-action@v1
       - name: Release Script
         env:
-          BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
-          BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.version.outputs.tag }}
+          UPLOAD_URL: ${{ github.event.release.upload_url }}
         run: .github/workflows/release.sh
