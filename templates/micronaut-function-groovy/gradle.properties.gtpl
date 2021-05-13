@@ -7,4 +7,4 @@ micronautDataVersion=1.0.0.RC1
 micronautFacebookSdkVersion=0.2.3
 druVersion=0.6.0
 gruVersion=0.8.2
-testcontainersVersion=1.15.2
+testcontainersVersion=1.15.3
