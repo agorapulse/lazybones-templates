@@ -14,7 +14,7 @@ $LAZYBONES_REPO_DIR/gradlew -p "$LAZYBONES_REPO_DIR" install installDist -x test
 
 export PATH="$PATH:$LAZYBONES_REPO_DIR/lazybones-app/build/install/lazybones/bin"
 
-./gradlew publishAllTemplates
+./gradlew packageAllTemplates
 
 uploadFile "Kordamp Groovy Template" "build/packages/kordamp-groovy-template-$RELEASE_VERSION.zip"
 uploadFile "Micronaut Function Groovy Template" "build/packages/micronaut-function-groovy-template-$RELEASE_VERSION.zip"
