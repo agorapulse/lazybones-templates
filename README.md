@@ -4,37 +4,13 @@ Set of useful Lazybones templates for working on open source or Micronaut Functi
 
 ## Installation
 
-If you don't have Lazybones installed yet, you can use SDKMAN:
+Lazybones is no longer part of SDKMAN. Use the following script to install it
 
 ```
-sdk install lazybones
+mkdir -p ~/.lazybones/app
+curl --show-error --location https://github.com/agorapulse/lazybones/releases/download/v0.8.3/lazybones-0.8.3.zip | tar -xf - -C ~/.lazybones/app
+export PATH="$PATH:~/.lazybones/app/lazybones-0.8.3/bin"
 ```
-
-Then you need to add Agorapulse Lazybones repositories to the configuration:
-
-```
-lazybones config add bintrayRepositories agorapulse/lazybones-templates
-```
-
-
-### Troubleshooting
-
-#### Exception in thread "main" java.io.FileNotFoundException: ~/.lazybones/managed-config.json (No such file or directory)
-
-You need to manually create file `~/.lazybones/managed-config.json` with the content `{ }` and try again.
-
-#### The user configuration file overrides this setting, so the new value won't take effect
-
-You need to manually edit file `~/.lazybones/config.groovy`:
-
-```
-bintrayRepositores = [
-    "pledbrook/lazybones-templates",
-    "agorapulse/lazybones-templates",
-]
-```
-
-Then you can create new project using the available templates
 
 ## Available Templates 
 
@@ -52,7 +28,7 @@ The generated project will contain
 Create new project using the available template
 
 ```
-lazybones create kordamp-groovy kordamp-test
+lazybones create https://github.com/agorapulse/lazybones-templates/releases/download/1.1.13/kordamp-groovy-template-1.1.13.zip kordamp-test
 ```
 
 [1]: http://kordamp.org/kordamp-gradle-plugins/
@@ -74,7 +50,7 @@ The generated project will contain
 Create new project using the available template
 
 ```
-lazybones create micronaut-function-groovy micronaut-template-test
+lazybones create https://github.com/agorapulse/lazybones-templates/releases/download/1.1.13/micronaut-function-groovy-template-1.1.13.zip micronaut-template-test
 ```
 
 [2]: http://micronaut.io
