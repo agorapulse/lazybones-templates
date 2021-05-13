@@ -23,5 +23,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.version.outputs.tag }}
-          UPLOAD_URL: ${{ github.event.release.upload_url }}
+          UPLOAD_URL: https://uploads.github.com/repos/${{ github.event.repository.full_name }}/releases/${{ github.event.release.id }}/assets
         run: .github/workflows/release.sh
