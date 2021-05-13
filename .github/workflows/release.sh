@@ -9,6 +9,7 @@ function uploadFile() {
 }
 
 set -e
+set -x
 
 for file in `find . -name VERSION`
 do
