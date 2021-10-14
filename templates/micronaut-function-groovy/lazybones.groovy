@@ -164,8 +164,7 @@ safeProcessTemplates "src/test/groovy/*.groovy", attrs
 
 FileUtils.moveFile(new File(templateDir, "request.http"), new File(projectDir, "${functionNameHyphens}.http"))
 
-FileUtils.moveFile(new File(templateDir, "src/main/groovy/Application.java"), new File(mainPackageDir, 'Application.java'))
-FileUtils.moveFile(new File(templateDir, "src/main/groovy/Handler.groovy"), new File(mainPackageDir, "${functionName}Handler.groovy"))
+FileUtils.moveFile(new File(templateDir, "src/main/groovy/Handler.java"), new File(mainPackageDir, "${functionName}Handler.java"))
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Service.groovy"), new File(mainPackageDir, "${functionName}Service.groovy"))
 FileUtils.moveFile(new File(templateDir, "src/main/groovy/Configuration.groovy"), new File(mainPackageDir, "${functionName}Configuration.groovy"))
 FileUtils.moveFile(new File(templateDir, "src/test/groovy/HandlerSpec.groovy"), new File(testPackageDir, "${functionName}HandlerSpec.groovy"))
@@ -191,6 +190,12 @@ for (lib in selectedLibs) {
             }
         }
     }
+}
+
+if (standalone) {
+    FileUtils.moveFile(new File(templateDir, "src/main/groovy/Application.java"), new File(mainPackageDir, 'Application.java'))
+} else {
+    FileUtils.deleteQuietly(new File(templateDir, "src/main/groovy/Application.java"))
 }
 
 if (isNewEvent(inputEventClass)) {

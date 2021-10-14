@@ -26,7 +26,7 @@ ag_ws:
   name: Micronaut AWS SDK API Gateway WebSockets
   link: 'https://agorapulse.github.io/micronaut-libraries/#_websockets_for_api_gateway'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-ag-ws:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-ag-ws:$micronautAwsSdkVersion
       scope: implementation
   configuration:
     aws:
@@ -38,7 +38,7 @@ cw:
   name: Micronaut AWS SDK CloudWatch
   link: 'https://agorapulse.github.io/micronaut-libraries/#_aws_sdk_for_micronaut'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-cloudwatch:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-cloudwatch:$micronautAwsSdkVersion
       scope: implementation
   provides:
     - name: cloudwatch
@@ -47,13 +47,13 @@ core:
   name: Micronaut AWS SDK Core
   link: 'https://agorapulse.github.io/micronaut-libraries/#_aws_sdk_for_micronaut'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-core:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-core:$micronautAwsSdkVersion
       scope: implementation
 dynamodb:
   name: Micronaut AWS SDK DynamoDB
   link: 'https://agorapulse.github.io/micronaut-libraries/#_dynamodb'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-dynamodb:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-dynamodb:$micronautAwsSdkVersion
       scope: implementation
   provides:
     - name: dynamoDBEntityService
@@ -71,7 +71,7 @@ kinesis:
   name: Micronaut AWS SDK Kinesis
   link: 'https://agorapulse.github.io/micronaut-libraries/#_kinesis'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-kinesis:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-kinesis:$micronautAwsSdkVersion
       scope: implementation
   configuration:
     aws:
@@ -85,17 +85,11 @@ kinesis:
     - name: SimpleKinesisClient
       path: $mainPackageRelativeDir/SimpleKinesisClient.java
       description: Example declarative Kinesis client
-kinesis_worker:
-  name: Micronaut AWS SDK Kinesis Worker
-  link: 'https://agorapulse.github.io/micronaut-libraries/#_listening_with_kinesislistener'
-  dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-kinesis-worker:$micronautLibrariesVersion
-      scope: implementation
 s3:
   name: Micronaut AWS SDK S3
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_storage_service_s3'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-s3:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-s3:$micronautAwsSdkVersion
       scope: implementation
   configuration:
     aws:
@@ -109,7 +103,7 @@ ses:
   name: Micronaut AWS SDK SES
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_email_service_ses'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-ses:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-ses:$micronautAwsSdkVersion
       scope: implementation
   provides:
     - name: ses
@@ -118,7 +112,7 @@ sns:
   name: Micronaut AWS SDK SNS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_notification_service_sns'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-sns:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-sns:$micronautAwsSdkVersion
       scope: implementation
   configuration:
     aws:
@@ -142,7 +136,7 @@ sqs:
   name: Micronaut AWS SDK SQS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_simple_queue_service_sqs'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-sqs:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-sqs:$micronautAwsSdkVersion
       scope: implementation
   configuration:
     aws:
@@ -168,7 +162,7 @@ sts:
   name: Micronaut AWS SDK STS
   link: 'https://agorapulse.github.io/micronaut-libraries/#_security_token_service_sts'
   dependency:
-    - coordinates: com.agorapulse:micronaut-aws-sdk-sts:$micronautLibrariesVersion
+    - coordinates: com.agorapulse:micronaut-aws-sdk-sts:$micronautAwsSdkVersion
       scope: implementation
   provides:
     - name: sts
@@ -180,9 +174,9 @@ data_jdbc:
     - coordinates: io.micronaut.data:micronaut-data-jdbc:$micronautDataVersion
       scope: implementation
     - coordinates: com.h2database:h2
-      scope: runtime
+      scope: runtimeOnly
     - coordinates: io.micronaut.configuration:micronaut-jdbc-hikari
-      scope: runtime
+      scope: runtimeOnly
     - coordinates: jakarta.persistence:jakarta.persistence-api:2.2.2
       scope: compileOnly
   configuration:
@@ -201,9 +195,9 @@ gorm_hibernate:
     - coordinates: io.micronaut.configuration:micronaut-hibernate-gorm
       scope: implementation
     - coordinates: com.h2database:h2
-      scope: runtime
+      scope: runtimeOnly
     - coordinates: org.apache.tomcat:tomcat-jdbc
-      scope: runtime
+      scope: runtimeOnly
   configuration:
     dataSource:
       pooled: true
@@ -243,13 +237,13 @@ remember:
   name: Agorapulse Remember
   link: 'https://github.com/agorapulse/remember#remember'
   dependency:
-    - coordinates: com.agorapulse:remember:0.4
+    - coordinates: com.agorapulse:remember:$rememberVersion
       scope: compileOnly
 snitch:
   name: Micronaut Snitch
   link: 'https://github.com/agorapulse/micronaut-snitch#micronaut-snitch'
   dependency:
-    - coordinates: com.agorapulse:micronaut-snitch:0.1.0
+    - coordinates: com.agorapulse:micronaut-snitch:$micronautSnitchVersion
       scope: implementation
   configuration:
     snitches:
@@ -259,7 +253,7 @@ fixt:
   name: Fixt (Test Fixure Loading Helper)
   link: 'https://agorapulse.github.io/testing-libraries/#_fixt'
   dependency:
-    - coordinates: com.agorapulse.testing:fixt:0.1.3
+    - coordinates: com.agorapulse.testing:fixt:$fixtVersion
       scope: testImplementation
   files:
   - name: FixtBasedSpec

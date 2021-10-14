@@ -35,7 +35,7 @@ dependencyManagement {
 dependencies {
     // custom dependencies
     <% for (dep in selectedLibs*.dependency.flatten().unique { it.coordinates } .sort { it.scope }) { %>
-    $dep.scope "$dep.coordinates" <% } %>
+    $dep.scope "${(standalone || !dep.coordinates.contains(':$'))? dep.coordinates : dep.coordinates.substring(0, dep.coordinates.lastIndexOf(':$'))}" <% } %>
 
     // default dependencies
     <% if (!oldGradle) { %>annotationProcessor platform("io.micronaut:micronaut-bom:" + micronautVersion)<% } %>
