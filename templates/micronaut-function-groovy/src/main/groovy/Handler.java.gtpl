@@ -27,7 +27,7 @@ public class ${functionName}Handler extends FunctionInitializer implements Funct
      */
     public static void main(String...args) throws IOException {
         try (${functionName}Handler function = new ${functionName}Handler()) {
-            function.run(args, (context) -> function.apply(context.get(${inputEventClassSimple}.class)));
+            function.run(args, context -> function.apply(context.get(${inputEventClassSimple}.class)));
         }
     }
 
