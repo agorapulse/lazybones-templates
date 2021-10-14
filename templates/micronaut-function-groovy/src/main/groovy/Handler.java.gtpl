@@ -9,8 +9,8 @@ package $pkg;
         'java.util.function.Function',
         'javax.inject.Inject',
     ] as TreeSet
-    if (requiresImport(inputEventClass)) { imports << inputEventClass }
-    if (requiresImport(outputEventClass)) { imports << outputEventClass }
+    if (requiresImportIntoJavaFile(inputEventClass)) { imports << inputEventClass }
+    if (requiresImportIntoJavaFile(outputEventClass)) { imports << outputEventClass }
     for (i in imports) {
         out << 'import ' << i << ';' << '\n'
     }

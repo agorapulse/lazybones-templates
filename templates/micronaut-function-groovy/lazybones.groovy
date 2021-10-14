@@ -128,6 +128,7 @@ Map attrs = [
         // methods
         isNewEvent: this.&isNewEvent,
         requiresImport: this.&requiresImport,
+        requiresImportIntoJavaFile: this.&requiresImportIntoJavaFile,
         newEventString: this.&newEventString,
         toYaml: this.&toYaml,
         isSelected: this.&isSelected.rcurry(selectedLibs),
@@ -368,6 +369,16 @@ private static boolean requiresImport(String eventName) {
         return false
     }
     if (eventName.startsWith('java.')) {
+        return false
+    }
+    return true
+}
+
+private static boolean requiresImportIntoJavaFile(String eventName) {
+    if (isNewEvent(eventName)) {
+        return false
+    }
+    if (eventName.startsWith('java.lang')) {
         return false
     }
     return true
