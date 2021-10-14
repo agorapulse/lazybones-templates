@@ -262,11 +262,11 @@ fixt:
   - name: hello.txt
     path: $testPackageResourcesRelativeDir/FixtBasedSpec/hello.txt
     description: Example fixture file
-gru_http:
-  name: Gru Tests for HTTP
-  link: 'https://agorapulse.github.io/gru/#_http'
+gru_micronaut:
+  name: Gru Tests for Micronaut
+  link: 'https://agorapulse.github.io/gru/#_micronaut'
   dependency:
-    - coordinates: com.agorapulse:gru-http:$gruVersion
+    - coordinates: com.agorapulse:gru-micronaut:$gruVersion
       scope: testImplementation
 gru_ag:
   name: Gru Tests for API Gateway
@@ -327,7 +327,7 @@ tc_postgresql:
       scope: testImplementation
     - coordinates: org.testcontainers:postgresql:$testcontainersVersion
       scope: testImplementation
-    - coordinates: org.codehaus.groovy:groovy-sql
+    - coordinates: org.codehaus.groovy:groovy-sql:$groovyVersion
       scope: testImplementation
   files:
     - name: PostgreSQLSpec
@@ -343,7 +343,7 @@ tc_mysql:
       scope: testImplementation
     - coordinates: org.testcontainers:mysql:$testcontainersVersion
       scope: testImplementation
-    - coordinates: org.codehaus.groovy:groovy-sql
+    - coordinates: org.codehaus.groovy:groovy-sql:$groovyVersion
       scope: testImplementation
   files:
     - name: MySQLSpec

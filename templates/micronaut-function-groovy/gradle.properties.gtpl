@@ -11,3 +11,4 @@ testcontainersVersion=1.16.0
 rememberVersion=0.4.2
 micronautSnitchVersion=1.1.3
 fixtVersion=0.1.3
+groovyVersion=2.5.8
