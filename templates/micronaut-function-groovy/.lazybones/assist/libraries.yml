@@ -327,6 +327,8 @@ tc_postgresql:
       scope: testImplementation
     - coordinates: org.testcontainers:postgresql:$testcontainersVersion
       scope: testImplementation
+    - coordinates: org.codehaus.groovy:groovy-sql
+      scope: testImplementation
   files:
     - name: PostgreSQLSpec
       path: $testPackageRelativeDir/PostgreSQLSpec.groovy
@@ -340,6 +342,8 @@ tc_mysql:
     - coordinates: org.testcontainers:spock:$testcontainersVersion
       scope: testImplementation
     - coordinates: org.testcontainers:mysql:$testcontainersVersion
+      scope: testImplementation
+    - coordinates: org.codehaus.groovy:groovy-sql
       scope: testImplementation
   files:
     - name: MySQLSpec
