@@ -4,13 +4,12 @@ import com.agorapulse.dru.Dru
 import com.agorapulse.dru.dynamodb.persistence.DynamoDB
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper
 import io.micronaut.context.ApplicationContext
-import org.junit.Rule
 import spock.lang.AutoCleanup
 import spock.lang.Specification
 
 class DynamoDBEntitySpec extends Specification {
 
-    @Rule Dru dru = Dru.plan {
+    @AutoCleanup Dru dru = Dru.plan {
         from 'entities.json', {
             map 'entities', {
                 to DynamoDBEntity

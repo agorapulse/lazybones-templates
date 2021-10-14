@@ -12,7 +12,7 @@ import spock.lang.Specification
 @Testcontainers
 class AwsSpec extends Specification {
 
-    @Shared LocalStackContainer localstack = new LocalStackContainer('0.10.7')
+    @Shared LocalStackContainer localstack = new LocalStackContainer()
             .withServices(LocalStackContainer.Service.SQS)
 
     @AutoCleanup ApplicationContext context

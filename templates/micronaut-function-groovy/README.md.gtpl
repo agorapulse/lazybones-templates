@@ -26,8 +26,8 @@ The following files are waiting for you implementation:
 } %>
 
 The following files are infrastructure ones and should not be changed:
- * [Application]($mainPackageRelativeDir/Application.java) - Local server launcher
- * [${functionName}Handler]($mainPackageRelativeDir/${functionName}Handler.groovy) - AWS Lambda handler
+<% if (standalone) { %> * [Application]($mainPackageRelativeDir/Application.java) - Local server launcher<% } %>
+ * [${functionName}Handler]($mainPackageRelativeDir/${functionName}Handler.java) - AWS Lambda handler
  * [${functionName}HandlerSpec]($testPackageRelativeDir/${functionName}HandlerSpec.groovy) - AWS Lambda handler sanity test
 
 There are two configuration files:
@@ -58,7 +58,7 @@ git push -u origin master
 ```
 
 <% } %>
-
+<% if (standalone) { %>
 ## Local Execution
 
 The function can be run using the embedded HTTP server at `http://localhost:$port`:
@@ -74,7 +74,7 @@ curl --header "Content-Type: application/json" --request POST --data '{ }' http:
 ```
 
 The port can be changed by setting the `micronaut.server.port` property in the local [configuration file](src/main/resources/application-dev.yml).
-
+<% } %>
 ## Manual Deployment
 
 You need to setup you AWS credentials before deploying this function. There are two ways how to achieve this:
