@@ -66,7 +66,7 @@ dependencies {
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
 
     <% if (!oldGradle) { %>testImplementation platform('io.micronaut:micronaut-bom:' + micronautVersion)<% } %>
-    testImplementation("org.spockframework:spock-core") {
+    testImplementation("org.spockframework:spock-core:" + spockVersion) {
         exclude group: "org.codehaus.groovy", module: "groovy-all"
     }
     testImplementation 'net.bytebuddy:byte-buddy:1.10.6'
@@ -93,6 +93,8 @@ tasks.withType(GroovyCompile) {
 }
 
 tasks.withType(Test){
+    useJUnitPlatform()
+
     environment 'TEST_RESOURCES_FOLDER', new File(project.projectDir, 'src/test/resources').canonicalPath
     environment 'AWS_CBOR_DISABLE', 'true'
 
