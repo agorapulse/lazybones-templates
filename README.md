@@ -28,7 +28,7 @@ The generated project will contain
 Create new project using the available template
 
 ```
-lazybones create https://github.com/agorapulse/lazybones-templates/releases/download/1.1.14/kordamp-groovy-template-1.1.15.zip kordamp-test
+lazybones create https://github.com/agorapulse/lazybones-templates/releases/download/1.1.15/kordamp-groovy-template-1.1.15.zip kordamp-test
 ```
 
 [1]: http://kordamp.org/kordamp-gradle-plugins/
@@ -50,7 +50,7 @@ The generated project will contain
 Create new project using the available template
 
 ```
-lazybones create https://github.com/agorapulse/lazybones-templates/releases/download/1.1.14/micronaut-function-groovy-template-1.1.15.zip micronaut-template-test
+lazybones create https://github.com/agorapulse/lazybones-templates/releases/download/1.1.15/micronaut-function-groovy-template-1.1.15.zip micronaut-template-test
 ```
 
 [2]: http://micronaut.io
